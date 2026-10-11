@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>配信後の記録｜LIVER ELITE ACADEMY</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="postlive" data-root="">
+<a class="skip-link" href="#main">本文へ進む</a>
+<header class="site-header">
+<div class="site-header__inner">
+<a class="site-name" href="index.html">LIVER ELITE ACADEMY<small>初版・仮デザイン</small></a>
+</div>
+</header>
+<nav class="nav" aria-label="主な移動"><ul><li><a href="index.html">ホーム</a></li><li><a href="map.html">マップ</a></li><li><a href="prelive.html">配信前</a></li><li><a href="postlive.html" aria-current="page">配信後</a></li><li><a href="skills.html">スキル</a></li><li><a href="toolbox/index.html">道具箱</a></li></ul></nav>
+<main id="main" class="main">
+<nav class="breadcrumb" aria-label="現在地"><ol><li><a href="index.html">ホーム</a></li><li>配信後の記録</li></ol></nav>
+
+<h1>配信後の記録</h1>
+<p><strong>配信おつかれさまでした。4 つだけ記録します。</strong>文字を打たなくても、タップだけで記録できます。</p>
+
+<form id="log-form">
+<fieldset id="q0" hidden>
+<legend>前にも来てくれた人は、今日いた？</legend>
+<div class="choices choices--row"><label class="choice"><input type="radio" name="q0" value="いた"><span>いた</span></label><label class="choice"><input type="radio" name="q0" value="いなかった"><span>いなかった</span></label><label class="choice"><input type="radio" name="q0" value="分からない"><span>分からない</span></label></div>
+<p class="small muted">人数や名前は書きません。</p>
+</fieldset>
+
+<fieldset id="q1">
+<legend>1　<span id="q1-legend">できた？</span></legend>
+<p id="q1-focus" class="focus-text js-only" hidden></p>
+<p id="q1-nofocus" class="small muted" hidden>今日は ONE FOCUS を決めずに配信しました。記録だけで十分です。</p>
+<div class="choices choices--row" id="q1-choices"><label class="choice"><input type="radio" name="q1" value="できた" required><span>できた</span></label><label class="choice"><input type="radio" name="q1" value="一部できた" required><span>一部できた</span></label><label class="choice"><input type="radio" name="q1" value="できなかった" required><span>できなかった</span></label></div>
+<div id="q1-reason" hidden>
+<p class="small"><strong>できなかったのは、どれに近い？</strong>（1 つ。選ばなくても記録できます）<span class="prov prov--3">③ 専門家の整理・補強（実データ未検証）</span></p>
+<div class="choices"><label class="choice"><input type="radio" name="q1reason" value="忘れた"><span>忘れた</span></label><label class="choice"><input type="radio" name="q1reason" value="大きすぎた"><span>大きすぎた</span></label><label class="choice"><input type="radio" name="q1reason" value="場面が来なかった"><span>場面が来なかった</span></label><label class="choice"><input type="radio" name="q1reason" value="怖い・恥ずかしい"><span>怖い・恥ずかしい</span></label><label class="choice"><input type="radio" name="q1reason" value="納得していない"><span>納得していない</span></label><label class="choice"><input type="radio" name="q1reason" value="生活が許さなかった"><span>生活が許さなかった</span></label></div>
+<p class="small muted">理由の分け方は専門家の補強です（K-OPS-003）。できなかった回は、数字で良し悪しを決めません。</p>
+</div>
+<details>
+<summary>配信中に守る 4 行で、抜けたものは？<span class="sub">任意</span></summary>
+<div class="details__body">
+<div class="choices choices--row"><label class="choice"><input type="radio" name="miss" value="なかった"><span>なかった</span></label><label class="choice"><input type="radio" name="miss" value="あった"><span>あった</span></label></div>
+<div id="miss-lines"><div class="checkline"><input type="checkbox" id="miss1" name="missline" value="1"><label for="miss1">入ってきた人・戻ってきた人に気づいたら、名前を呼ぶ（可能な範囲で）</label></div><div class="checkline"><input type="checkbox" id="miss2" name="missline" value="2"><label for="miss2">何者で、いま何をしている配信かを一言で言う（入室時と話の節目に）</label></div><div class="checkline"><input type="checkbox" id="miss3" name="missline" value="3"><label for="miss3">一言で答えられる問いを 1 つ渡す</label></div><div class="checkline"><input type="checkbox" id="miss4" name="missline" value="4"><label for="miss4">（やらないこと）ギフトの有無で声の温度を変えない</label></div></div>
+</div>
+</details>
+</fieldset>
+
+<fieldset id="q2">
+<legend>2　何が起きた？</legend>
+<p id="q2-obs" class="small"></p>
+<div class="choices choices--row"><label class="choice"><input type="radio" name="q2" value="見られた" required><span>見られた</span></label><label class="choice"><input type="radio" name="q2" value="見られなかった" required><span>見られなかった</span></label><label class="choice"><input type="radio" name="q2" value="分からない・確かめられなかった" required><span>分からない・確かめられなかった</span></label></div>
+</fieldset>
+
+<fieldset id="q3">
+<legend>3　いちばん困った所は？　<span class="small muted">1 枚だけ</span></legend>
+<div class="choices"><label class="choice"><input type="radio" name="q3" value="1" required><span>人が来なかった</span></label><label class="choice"><input type="radio" name="q3" value="2" required><span>来てもすぐ帰った</span></label><label class="choice"><input type="radio" name="q3" value="3" required><span>見ているけど話してくれなかった</span></label><label class="choice"><input type="radio" name="q3" value="4" required><span>フォローにつながらなかった</span></label><label class="choice"><input type="radio" name="q3" value="5" required><span>応援が弱かった</span></label><label class="choice"><input type="radio" name="q3" value="skip" required><span>今日は選ばない（分からない・特に困らなかった）</span></label></div>
+<p class="small muted">応援が弱いときも、原因が上の 4 つにあることがあります。これは診断ではなく記録です。1 回の答えで課題を決めません。</p>
+</fieldset>
+
+<fieldset id="q4">
+<legend>4　<span id="q4-legend">次の配信は？</span></legend>
+<div class="choices"><label class="choice"><input type="radio" name="q4" value="続ける" checked><span>続ける</span></label><label class="choice"><input type="radio" name="q4" value="小さく・少し変えて続ける"><span>小さく・少し変えて続ける</span></label><label class="choice"><input type="radio" name="q4" value="別の 1 つ"><span>別の 1 つ</span></label></div>
+<div id="q4-edit" class="field" hidden><label for="q4-text">小さく・少し変えた 1 文</label><input type="text" id="q4-text" maxlength="120" autocomplete="off"></div>
+</fieldset>
+
+<div class="btn-row"><button type="submit" class="btn btn--primary btn--block js-only">記録する</button></div>
+<p id="log-error" class="small" role="alert"></p>
+
+<fieldset>
+<legend>入れられるものだけ（あとからでも入れられます）</legend>
+<div class="field"><label for="good">良かったこと（1 行）</label><input type="text" id="good" maxlength="200" autocomplete="off"></div>
+<p class="small"><strong>数字</strong>（どれも任意。取れないものは空のままで構いません）</p>
+<p id="num-suggest" class="small muted"></p>
+<div class="num-grid"><div class="field"><label for="num0">Unique viewers</label><input type="text" inputmode="decimal" id="num0" name="num" data-name="Unique viewers" autocomplete="off"></div><div class="field"><label for="num1">Avg watch time</label><input type="text" inputmode="decimal" id="num1" name="num" data-name="Avg watch time" autocomplete="off"></div><div class="field"><label for="num2">Comments</label><input type="text" inputmode="decimal" id="num2" name="num" data-name="Comments" autocomplete="off"></div><div class="field"><label for="num3">New followers</label><input type="text" inputmode="decimal" id="num3" name="num" data-name="New followers" autocomplete="off"></div><div class="field"><label for="num4">Gifters</label><input type="text" inputmode="decimal" id="num4" name="num" data-name="Gifters" autocomplete="off"></div><div class="field"><label for="num5">配信時間</label><input type="text" inputmode="decimal" id="num5" name="num" data-name="配信時間" autocomplete="off"></div></div>
+<div class="field"><label for="kind">種別</label><select id="kind"><option value="通常" selected>通常</option><option value="バトル">バトル</option><option value="イベント">イベント</option><option value="コラボ">コラボ</option></select></div>
+<p class="small muted"><strong>視聴者の名前・コメントの原文は書かないでください。</strong></p>
+</fieldset>
+</form>
+
+<section id="log-saved" class="card card--main" hidden aria-live="polite"></section>
+
+<section id="period-review" class="card js-only" hidden>
+<h2>区切りの振り返り（簡易版）</h2>
+<p class="small muted">記録が複数たまったら、いつでも使えます（暦では決めません）。Lesson「記録を並べて、次の 1 つを決める（簡易）」に読み方があります。</p>
+<div id="review-table"></div>
+<form id="review-form">
+<fieldset>
+<legend>1　この 1 つは</legend>
+<p id="review-focus" class="focus-text" hidden></p>
+<div class="choices"><label class="choice"><input type="radio" name="r1" value="意識しなくてもできる"><span>意識しなくてもできる</span></label><label class="choice"><input type="radio" name="r1" value="まだ続ける" checked><span>まだ続ける</span></label><label class="choice"><input type="radio" name="r1" value="小さくする"><span>小さくする</span></label><label class="choice"><input type="radio" name="r1" value="合っていないのでやめる"><span>合っていないのでやめる</span></label></div>
+</fieldset>
+<fieldset>
+<legend>2　「困った所」でいちばん多かったのは</legend>
+<div id="review-tally"></div>
+<p class="small muted">「今日は選ばない」は数えません。回数が少ないうちは、傾向としては読めません。他の人の数字とは比べません。</p>
+</fieldset>
+<fieldset>
+<legend>3　次の ONE FOCUS を 1 つ</legend>
+<p class="small">保存したあと、<a href="focus.html">ONE FOCUS の候補</a>から 1 つ選びます。</p>
+<div class="checkline"><input type="checkbox" id="review-rest"><label for="review-rest">次の 1 つは「休む」にする</label></div>
+</fieldset>
+<fieldset>
+<legend>疲れの点検</legend>
+<p class="small">当てはまらないものがあれば、「休む」を次の 1 つにして構いません。</p>
+<details class="src"><summary>原本 15 §18A　CREATOR SUSTAINABILITY CHECK <span class="sub">原本内のタグ: 節には無し（ファイル冒頭の宣言 [EXPERT ADDITION / INFERENCE]）</span></summary><div class="details__body"><ul><li class="task"><div class="checkline"><input type="checkbox" id="ck969"><label for="ck969">睡眠 / 休養が取れている</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck970"><label for="ck970">声・喉に異常なし</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck971"><label for="ck971">長時間後半でも初見対応品質を維持</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck972"><label for="ck972">本業を圧迫していない</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck973"><label for="ck973">イベント後にRecovery日がある</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck974"><label for="ck974">DM / SNS対応が過負荷でない</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck975"><label for="ck975">Revenue/hourが長時間化で極端に落ちていない</label></div></li><li class="task"><div class="checkline"><input type="checkbox" id="ck976"><label for="ck976">休むことをFailure扱いしていない</label></div></li></ul></div></details>
+<p class="small" data-only-for="performer" hidden><strong>本業の稽古・撮影・公演の Quality を削ってまで LIVE 時間を最大化しない</strong></p>
+</fieldset>
+<div class="btn-row"><button type="submit" class="btn btn--primary">振り返りを保存する</button></div>
+<p id="review-msg" class="small" aria-live="polite"></p>
+</form>
+</section>
+
+<section id="log-list-section" class="js-only">
+<h2>これまでの記録</h2>
+<div id="log-list"><p class="muted">まだ記録はありません。</p></div>
+</section>
+<p class="small muted nojs-only">記録の保存と一覧には JavaScript が必要です。問いの内容は、このままで読めます。</p>
+
+</main>
+<footer class="site-footer">
+<ul>
+<li><a href="start.html">入口診断</a></li>
+<li><a href="focus.html">ONE FOCUS の候補</a></li>
+<li><a href="settings.html">設定・自分のデータ</a></li>
+<li><a href="about.html">このサイトについて／出どころの見方</a></li>
+</ul>
+<p>学習の記録は、このブラウザの中だけに保存されます。TikTok 公式のサイトではありません。</p>
+<p class="ops-link"><a href="ops.html">運営向け</a>　ビルド: 2026-10-11 10:59</p>
+</footer>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/site-data.js"></script>
+<script src="assets/js/model.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

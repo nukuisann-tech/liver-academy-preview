@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>入口診断｜LIVER ELITE ACADEMY</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="start" data-root="">
+<a class="skip-link" href="#main">本文へ進む</a>
+<header class="site-header">
+<div class="site-header__inner">
+<a class="site-name" href="index.html">LIVER ELITE ACADEMY<small>初版・仮デザイン</small></a>
+</div>
+</header>
+<nav class="nav" aria-label="主な移動"><ul><li><a href="index.html">ホーム</a></li><li><a href="map.html">マップ</a></li><li><a href="prelive.html">配信前</a></li><li><a href="postlive.html">配信後</a></li><li><a href="skills.html">スキル</a></li><li><a href="toolbox/index.html">道具箱</a></li></ul></nav>
+<main id="main" class="main">
+<nav class="breadcrumb" aria-label="現在地"><ol><li><a href="index.html">ホーム</a></li><li>入口診断</li></ol></nav>
+
+<h1>入口診断</h1>
+<p>始める場所を勧めるための、短い質問です。腕前を判定するものではありません。あとから何度でも選び直せます。</p>
+<div class="note"><p>この画面は Lesson <a href="lessons/C00-L02.html">自分の現在地を知り、始める章を決める</a> と同じものです。いまは、自分で当てはまるものを選ぶ簡易版です（くわしい質問票は準備中）。</p></div>
+
+<form id="entry-form">
+<fieldset>
+<legend>1　いまの自分に近いものは？</legend>
+<div class="choices"><label class="choice"><input type="radio" name="entry-type" value="A"><span>まだ配信したことがない</span></label><label class="choice"><input type="radio" name="entry-type" value="B"><span>配信したことがある</span></label><label class="choice"><input type="radio" name="entry-type" value="C"><span>配信を続けていて、常連や売上がある。どこを直すかを数字で決めたい</span></label><label class="choice"><input type="radio" name="entry-type" value="D"><span>仕組みとして回したい（上級）</span></label></div>
+</fieldset>
+<fieldset>
+<legend>2　俳優・舞台・モデル・音楽・ダンス・声の仕事など、表現者として活動していますか？</legend>
+<div class="choices choices--row">
+<label class="choice"><input type="radio" name="entry-performer" value="yes"><span>している</span></label>
+<label class="choice"><input type="radio" name="entry-performer" value="no"><span>していない</span></label>
+</div>
+<p class="small muted">「している」を選ぶと、表現者向けの Lesson（見せないものを守る、本業との両立など）が、関係する Lesson のすぐ後に出ます。設定はいつでも変えられます。</p>
+</fieldset>
+<div class="btn-row"><button type="submit" class="btn btn--primary">この内容で始める</button></div>
+</form>
+<div id="entry-result" class="card card--main" hidden aria-live="polite"></div>
+
+<section class="card">
+<h2>選んだ答えと、始める場所</h2>
+<ul><li><strong>まだ配信したことがない</strong> → 「初配信までの道」から始めます。 <a href="map.html#fast-track">ここから始める</a></li><li><strong>配信したことがある</strong> → 初配信までの道は出しません。初心者（L1）の最初の章から始めます。 <a href="chapters/C04.html">ここから始める</a></li><li><strong>配信を続けていて、常連や売上がある。どこを直すかを数字で決めたい</strong> → 中級（L2）の入口、C10 の最初の Lesson から始めます。 <a href="chapters/C10.html">ここから始める</a></li><li><strong>仕組みとして回したい（上級）</strong> → 上級（L3）の入口、C14 から始めます。 <a href="chapters/C14.html">ここから始める</a></li></ul>
+<p class="small muted">始める場所の割り当ては、初版の仮の決め方です。どこから始めても、すべての Lesson を読めます。</p>
+</section>
+
+</main>
+<footer class="site-footer">
+<ul>
+<li><a href="start.html">入口診断</a></li>
+<li><a href="focus.html">ONE FOCUS の候補</a></li>
+<li><a href="settings.html">設定・自分のデータ</a></li>
+<li><a href="about.html">このサイトについて／出どころの見方</a></li>
+</ul>
+<p>学習の記録は、このブラウザの中だけに保存されます。TikTok 公式のサイトではありません。</p>
+<p class="ops-link"><a href="ops.html">運営向け</a>　ビルド: 2026-10-11 10:59</p>
+</footer>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/site-data.js"></script>
+<script src="assets/js/model.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

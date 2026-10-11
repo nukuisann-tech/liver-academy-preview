@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>設定・自分のデータ｜LIVER ELITE ACADEMY</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body data-page="settings" data-root="">
+<a class="skip-link" href="#main">本文へ進む</a>
+<header class="site-header">
+<div class="site-header__inner">
+<a class="site-name" href="index.html">LIVER ELITE ACADEMY<small>初版・仮デザイン</small></a>
+</div>
+</header>
+<nav class="nav" aria-label="主な移動"><ul><li><a href="index.html">ホーム</a></li><li><a href="map.html">マップ</a></li><li><a href="prelive.html">配信前</a></li><li><a href="postlive.html">配信後</a></li><li><a href="skills.html">スキル</a></li><li><a href="toolbox/index.html">道具箱</a></li></ul></nav>
+<main id="main" class="main">
+<nav class="breadcrumb" aria-label="現在地"><ol><li><a href="index.html">ホーム</a></li><li>設定・自分のデータ</li></ol></nav>
+
+<h1>設定・自分のデータ</h1>
+<p class="muted nojs-only">設定と記録の管理には JavaScript が必要です。</p>
+<form id="settings-form" class="js-only">
+<fieldset>
+<legend>表現者の設定</legend>
+<div class="checkline"><input type="checkbox" id="set-performer"><label for="set-performer">俳優・舞台・モデル・音楽・ダンス・声の仕事など、表現者として活動している</label></div>
+<p class="small muted">入れると、表現者向けの Lesson と確認項目が出ます。</p>
+</fieldset>
+<fieldset>
+<legend>初配信</legend>
+<div class="checkline"><input type="checkbox" id="set-firstlive"><label for="set-firstlive">初配信は済んでいる</label></div>
+<p class="small muted">入れると、ホームと学習マップが「初配信までの道」から通常の表示に替わります。</p>
+<div class="field"><label for="set-firstdate">初配信の日（任意。置かなくて構いません）</label><input type="date" id="set-firstdate"></div>
+</fieldset>
+<fieldset>
+<legend>配信前の確認（BASELINE CHECK）に出す段</legend>
+<div class="field"><label for="set-stage">どの段まで出すか</label><select id="set-stage"><option value="B0">B0 初配信から</option><option value="B1">B1 成立させる段で足す</option><option value="B2">B2 再現性の段で足す</option><option value="B3">B3 上級で足す</option></select></div>
+<p class="small muted">段は自分で上げます。上の段を選ぶと、確認する項目が増えます。</p>
+</fieldset>
+<p id="settings-msg" class="small" aria-live="polite"></p>
+</form>
+
+<section class="card js-only">
+<h2>自分のデータ</h2>
+<p>学習の記録（ONE FOCUS・配信前の確認・配信後の記録・Lesson の進み・証拠・設定）は、このブラウザの中だけに保存されています。どこにも送られません。</p>
+<p id="data-summary" class="small muted"></p>
+<div class="btn-row">
+<button type="button" class="btn" data-act="data-export">記録を書き出す（JSON）</button>
+<label class="btn btn--quiet" for="data-import-file">書き出した記録を読み込む</label>
+<input type="file" id="data-import-file" accept="application/json,.json" hidden>
+</div>
+<div class="btn-row"><button type="button" class="btn btn--quiet" data-act="data-clear">記録をすべて消す</button></div>
+<p id="data-msg" class="small" aria-live="polite"></p>
+<p class="small muted">ブラウザの履歴やサイトのデータを消すと、記録も消えます。残したいときは書き出してください。</p>
+</section>
+<p><a href="start.html">入口診断をやり直す</a></p>
+
+</main>
+<footer class="site-footer">
+<ul>
+<li><a href="start.html">入口診断</a></li>
+<li><a href="focus.html">ONE FOCUS の候補</a></li>
+<li><a href="settings.html">設定・自分のデータ</a></li>
+<li><a href="about.html">このサイトについて／出どころの見方</a></li>
+</ul>
+<p>学習の記録は、このブラウザの中だけに保存されます。TikTok 公式のサイトではありません。</p>
+<p class="ops-link"><a href="ops.html">運営向け</a>　ビルド: 2026-10-11 10:59</p>
+</footer>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/site-data.js"></script>
+<script src="assets/js/model.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
