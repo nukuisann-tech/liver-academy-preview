@@ -1,0 +1,141 @@
+/* tokens.css（contents 用）— デザインの変数だけを置く。
+   contents.css と、サムネイルの SVG（contents_tpl/thumb.py がビルド時にこのファイルを読む）は、
+   ここの変数だけを使う。見た目を差し替えるときは、このファイルだけを置き換える。
+   あとで全サイトの Design System に統合する前提（v0.1 の assets/css/tokens.css とは別物）。 */
+:root {
+  /* ---- 色: 面 ---- */
+  --c-paper: #faf8f3;        /* ページの地（温かい紙の白） */
+  --c-surface: #ffffff;      /* カード */
+  --c-surface-2: #f4f1ea;    /* 一段沈めた面 */
+  --c-surface-3: #ebe6db;    /* さらに沈めた面 */
+  /* ---- 色: 文字 ---- */
+  --c-ink: #1b2126;          /* 本文・見出し */
+  --c-ink-2: #454e56;        /* 補足 */
+  --c-ink-3: #5f6871;        /* ラベル・注記（紙の上で 4.5:1 以上） */
+  --c-on-dark: #ffffff;
+  --c-on-dark-2: #b9c1c9;
+  /* ---- 色: 線 ---- */
+  --c-line: #e4dfd3;
+  --c-line-strong: #cfc8b8;
+  /* ---- 色: 役割 ---- */
+  --c-dark: #171c21;         /* まとめ・LIVE 画面の地 */
+  --c-dark-2: #232a31;
+  --c-marker: #ffe27a;       /* 太字のマーカー・まとめの数字 */
+  --c-marker-soft: #fff6d1;
+  --c-focus: #1e5fd8;
+  --c-good: #0b7a6e;
+  --c-good-soft: #e3f4f0;
+  --c-good-line: #a9ded5;
+  --c-bad: #b0473a;
+  --c-bad-soft: #fbece8;
+  --c-bad-line: #efc4bb;
+  --c-tip: #0b7a6e;
+  --c-tip-soft: #e9f6f3;
+  --c-caution: #a85a00;
+  --c-caution-soft: #fdf1dc;
+  --c-key: #7a5a00;
+  --c-key-soft: #fff6d1;
+  --c-term: #2a55b0;
+  --c-term-soft: #ebf1fc;
+  --c-live: #e5484d;         /* LIVE のバッジ */
+
+  /* ---- 色: カテゴリのアクセント（main / deep = 文字に使える濃さ / soft = 面 / mid = 線） ---- */
+  --accent-teal-main: #0e9384;
+  --accent-teal-deep: #0a6b60;
+  --accent-teal-soft: #e3f5f1;
+  --accent-teal-mid: #a9ded5;
+  --accent-coral-main: #e4572e;
+  --accent-coral-deep: #b03a17;
+  --accent-coral-soft: #fdede6;
+  --accent-coral-mid: #f6c6b4;
+  --accent-blue-main: #2e6be6;
+  --accent-blue-deep: #1e4cb0;
+  --accent-blue-soft: #e8effd;
+  --accent-blue-mid: #b9cef8;
+  --accent-amber-main: #d98a00;
+  --accent-amber-deep: #8f5a00;
+  --accent-amber-soft: #fcf1da;
+  --accent-amber-mid: #f0d08c;
+  --accent-pink-main: #d6457f;
+  --accent-pink-deep: #a52c5c;
+  --accent-pink-soft: #fce9f0;
+  --accent-pink-mid: #f3bbd0;
+  --accent-green-main: #3e9b4f;
+  --accent-green-deep: #2a6f38;
+  --accent-green-soft: #e7f4e8;
+  --accent-green-mid: #b5ddbb;
+
+  /* ---- 色: サムネイルの図（SVG に焼き込む） ---- */
+  --thumb-ink: #1b2126;
+  --thumb-sub: #5f6871;
+  --thumb-surface: #ffffff;
+  --thumb-muted: #eef0f1;
+  --thumb-muted-line: #c9ced3;
+  --thumb-muted-ink: #6b747c;
+  --thumb-skin: #f7d9c4;
+  --thumb-screen: #171c21;
+  --thumb-live: #e5484d;
+
+  /* ---- 書体（Web フォントは読み込まない。端末の日本語書体で組む） ---- */
+  --font-jp: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", Meiryo, system-ui, sans-serif;
+  --font-num: "Avenir Next", "Helvetica Neue", "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+
+  /* ---- 文字の大きさ（スマホ基準。広い画面は contents.css の最後で上書き） ---- */
+  --fs-xs: 0.75rem;     /* 12 ラベル */
+  --fs-sm: 0.8125rem;   /* 13 注記 */
+  --fs-md: 0.9375rem;   /* 15 カード内 */
+  --fs-body: 1rem;      /* 16 本文 */
+  --fs-lead: 1.0625rem; /* 17 Promise・結論 */
+  --fs-h3: 1.125rem;    /* 18 */
+  --fs-h2: 1.375rem;    /* 22 セクション見出し */
+  --fs-h1: 1.5rem;      /* 24 記事の題（スマホ。長い題でも 3〜4 行に収める） */
+  --lh-body: 1.9;
+  --lh-tight: 1.5;
+  --lh-card: 1.75;
+  --ls-body: 0.03em;
+  --ls-head: 0.02em;
+  --ls-label: 0.08em;
+  --fw-regular: 400;
+  --fw-medium: 600;
+  --fw-bold: 700;
+
+  /* ---- 余白（4 の倍数） ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+  --gutter: 20px;          /* 画面の左右 */
+  --block-gap: 28px;       /* ブロックどうし */
+  --section-gap: 72px;     /* セクションどうし */
+
+  /* ---- 幅 ---- */
+  --w-read: 42rem;         /* 本文の最大幅（17px で 1 行およそ 38 字） */
+  --w-toc: 13.5rem;
+  --w-page: 70rem;         /* Library の最大幅 */
+
+  /* ---- 角丸・影・線 ---- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(27, 33, 38, 0.06), 0 2px 8px rgba(27, 33, 38, 0.04);
+  --shadow-2: 0 2px 4px rgba(27, 33, 38, 0.06), 0 12px 28px rgba(27, 33, 38, 0.10);
+  --bw: 1px;
+  --tap: 44px;             /* タップ領域の最小 */
+  --dur: 0.18s;
+}
+
+/* カテゴリのアクセントを、ページやカードに 1 つ割り当てる */
+[data-accent="teal"]  { --cat: var(--accent-teal-main);  --cat-deep: var(--accent-teal-deep);  --cat-soft: var(--accent-teal-soft);  --cat-mid: var(--accent-teal-mid); }
+[data-accent="coral"] { --cat: var(--accent-coral-main); --cat-deep: var(--accent-coral-deep); --cat-soft: var(--accent-coral-soft); --cat-mid: var(--accent-coral-mid); }
+[data-accent="blue"]  { --cat: var(--accent-blue-main);  --cat-deep: var(--accent-blue-deep);  --cat-soft: var(--accent-blue-soft);  --cat-mid: var(--accent-blue-mid); }
+[data-accent="amber"] { --cat: var(--accent-amber-main); --cat-deep: var(--accent-amber-deep); --cat-soft: var(--accent-amber-soft); --cat-mid: var(--accent-amber-mid); }
+[data-accent="pink"]  { --cat: var(--accent-pink-main);  --cat-deep: var(--accent-pink-deep);  --cat-soft: var(--accent-pink-soft);  --cat-mid: var(--accent-pink-mid); }
+[data-accent="green"] { --cat: var(--accent-green-main); --cat-deep: var(--accent-green-deep); --cat-soft: var(--accent-green-soft); --cat-mid: var(--accent-green-mid); }
