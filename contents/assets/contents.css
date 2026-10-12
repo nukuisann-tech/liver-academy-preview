@@ -1805,3 +1805,38 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
   .crs__list--n3 .shc__link:hover .shc__thumb img, .crs__list--n2 .shc__link:hover .shc__thumb img { transform: scale(1.04); }
   .crs__list--n3 .shc__body, .crs__list--n2 .shc__body { padding: 18px 18px 16px; }
 }
+
+
+/* =====================================================================================================
+   16 v7: 一覧のカードを軽くする（CARD STANDARD）
+   サムネイル → 小さいカテゴリ → 題 → 価値を 1〜2 行 → 時間と小さい矢印。枠と面をやめ、サムネイルを主役にする。
+   ===================================================================================================== */
+.crs__list { gap: 44px; }
+.shc__link { border: 0; background: none; border-radius: 0; overflow: visible; }
+.shc__link:hover { transform: none; box-shadow: none; }
+.shc__thumb { border-radius: 18px; box-shadow: 0 1px 0 rgba(27, 33, 38, 0.06); transition: transform var(--dur), box-shadow var(--dur); }
+.shc__link:hover .shc__thumb { transform: translateY(-4px); box-shadow: 0 16px 30px rgba(27, 33, 38, 0.2); }
+.shc__thumb img, .shc__link:hover .shc__thumb img { transform: none; object-fit: cover; }
+.shc__body { padding: 16px 4px 0; }
+.shc__cat { display: flex; align-items: center; gap: 8px; line-height: 1; }
+.shc__no { position: static; opacity: 1; font-family: var(--font-num); font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.04em; color: var(--c-ink-3); }
+.shc__tag { padding: 0; border-radius: 0; background: none; color: var(--cat-deep); font-size: 0.8125rem; font-weight: 800; letter-spacing: 0.08em; }
+.shc__title { margin-top: 10px; font-size: 1.3125rem; line-height: 1.5; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+.shc__promise { margin-top: 8px; font-size: 0.875rem; line-height: 1.8; color: var(--c-ink-2); display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.shc__foot { margin-top: 0; padding-top: 14px; justify-content: flex-start; gap: 10px; }
+.shc__go { min-height: 0; padding: 0; border-radius: 0; background: none; color: var(--c-ink-3); transition: transform var(--dur), color var(--dur); }
+.shc__link:hover .shc__go { background: none; color: var(--c-ink); transform: translateX(4px); }
+.shc__link:hover .shc__title { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
+@media (prefers-reduced-motion: reduce) { .shc__link:hover .shc__thumb, .shc__link:hover .shc__go { transform: none; } }
+@media (min-width: 700px) {
+  .crs__list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 32px; }
+  .shc__link { flex-direction: column; }
+  .shc__thumb { width: auto; aspect-ratio: 16 / 9; min-height: 0; }
+  .shc__thumb img { position: static; }
+  .shc__body { padding: 18px 4px 0; }
+}
+@media (min-width: 980px) {
+  .crs__list--n3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 44px; }
+  .crs__list--n3 .shc__body, .crs__list--n2 .shc__body { padding: 20px 4px 0; }
+  .crs__list--n3 .shc__link:hover .shc__thumb img, .crs__list--n2 .shc__link:hover .shc__thumb img { transform: none; }
+}
