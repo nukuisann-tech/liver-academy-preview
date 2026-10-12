@@ -38,6 +38,7 @@
   --c-term: #2a55b0;
   --c-term-soft: #ebf1fc;
   --c-live: #e5484d;         /* LIVE のバッジ */
+  --c-dark-line: rgba(255, 255, 255, 0.16);  /* 濃い面の上の罫 */
 
   /* ---- 色: カテゴリのアクセント（main / deep = 文字に使える濃さ / soft = 面 / mid = 線） ---- */
   --accent-teal-main: #0e9384;
@@ -79,6 +80,8 @@
   /* ---- 書体（Web フォントは読み込まない。端末の日本語書体で組む） ---- */
   --font-jp: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "BIZ UDPGothic", "Yu Gothic Medium", "Yu Gothic", Meiryo, system-ui, sans-serif;
   --font-num: "Avenir Next", "Helvetica Neue", "Segoe UI", Roboto, "Hiragino Sans", "Noto Sans JP", sans-serif;
+
+  --font-mono: "SF Mono", ui-monospace, "Roboto Mono", Menlo, Consolas, monospace;  /* LESSON・STEP・MISSION の番号 */
 
   /* ---- 文字の大きさ（スマホ基準。広い画面は contents.css の最後で上書き） ---- */
   --fs-xs: 0.75rem;     /* 12 ラベル */

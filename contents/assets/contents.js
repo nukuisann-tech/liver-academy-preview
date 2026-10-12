@@ -1,5 +1,5 @@
 /* contents.js — CONTENT LIBRARY と Content Article の動き。
- * 本文はすべて HTML に入っている。ここは「絞り込み・保存・目次の現在地・コピー」を足すだけ。
+ * 本文はすべて HTML に入っている。ここは「絞り込み・保存（MISSION・CLEAR のチェック）・STEP の進み具合・コピー」を足すだけ。
  *
  * 保存の窓口は CTStore の 1 か所だけ（ほかの場所で localStorage を直接触らない）。
  * 既存サイトの LEAStore（assets/js/store.js）と同じ 6 つの関数（get / set / list / remove / export / clear）で、
@@ -7,7 +7,8 @@
  *
  * 保存するもの（1 件 = 1 キー。値は { 欄の名前: 値 } と updatedAt）:
  *   field/<記事ID>/<セクションID>/b<番号>   本文の checklist（c0, c1…: true）・try のメモ（a: 文字）
- *   field/<記事ID>/action                    ✅ 次の LIVE までにやること（a0, a1…: true）
+ *   field/<記事ID>/mission                   NEXT MISSION（m0, m1…: true）
+ *   field/<記事ID>/clear                     CLEAR CONDITION（clear: true）
  *   field/<記事ID>/tool<番号>                道具（c*: チェック／w*: 記入／t*: テンプレートの書き換え／そのほか: 組み立ての欄）
  */
 (function (global) {
@@ -80,6 +81,13 @@
         if (counter) {
           var boxes = fields.filter(function (el) { return el.type === 'checkbox'; });
           counter.textContent = boxes.filter(function (el) { return el.checked; }).length + ' / ' + boxes.length;
+        }
+        /* MISSION の進み具合・CLEAR の表示（チェックが全部付いたら is-done） */
+        var cbs = fields.filter(function (el) { return el.type === 'checkbox'; });
+        if (cbs.length) {
+          var on = cbs.filter(function (el) { return el.checked; }).length;
+          box.style.setProperty('--done', String(on / cbs.length));
+          box.classList.toggle('is-done', on === cbs.length);
         }
         updateBuilder(box);
         fields.forEach(autoGrow);
@@ -175,11 +183,11 @@
     });
   }
 
-  /* ---------------------------------------------------------------- 記事: 目次の現在地・読んだ位置 */
+  /* ---------------------------------------------------------------- 記事: STEP の進み具合（いまどの STEP か）・読んだ位置 */
   function initToc() {
     var toc = doc.getElementById('toc'), bar = doc.getElementById('progress');
     if (!toc && !bar) return;
-    var links = toc ? all('.toc__list a', toc) : [], map = {};
+    var links = toc ? all('a[href^="#"]', toc) : [], map = {};
     links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
     var targets = Object.keys(map).map(function (id) { return doc.getElementById(id); }).filter(Boolean);
     var body = doc.querySelector('.art__grid'), ticking = false;
@@ -187,7 +195,11 @@
       ticking = false;
       var y = global.scrollY || doc.documentElement.scrollTop, line = y + global.innerHeight * 0.3, cur = null;
       targets.forEach(function (t) { if (t.getBoundingClientRect().top + y <= line) cur = t; });
-      links.forEach(function (a) { if (cur && map[cur.id] === a) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+      var curAt = cur ? links.indexOf(map[cur.id]) : -1;
+      links.forEach(function (a, i) {
+        if (i === curAt) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        a.classList.toggle('is-past', i < curAt);
+      });
       if (bar && body) {
         var top = body.getBoundingClientRect().top + y, h = body.offsetHeight - global.innerHeight * 0.6;
         bar.style.width = Math.max(0, Math.min(100, (y - top + global.innerHeight * 0.4) / h * 100)) + '%';
