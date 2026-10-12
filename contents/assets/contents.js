@@ -7,8 +7,8 @@
  *
  * 保存するもの（1 件 = 1 キー。値は { 欄の名前: 値 } と updatedAt）:
  *   field/<記事ID>/<セクションID>/b<番号>   本文の checklist（c0, c1…: true）・try のメモ（a: 文字）
- *   field/<記事ID>/mission                   NEXT MISSION（m0, m1…: true）
- *   field/<記事ID>/clear                     CLEAR CONDITION（clear: true）
+ *   field/<記事ID>/mission                   次の配信で試すこと（m0, m1…: true）
+ *   field/<記事ID>/clear                     できた目安（clear: true）
  *   field/<記事ID>/tool<番号>                道具（c*: チェック／w*: 記入／t*: テンプレートの書き換え／そのほか: 組み立ての欄）
  */
 (function (global) {
@@ -190,7 +190,7 @@
     var links = toc ? all('a[href^="#"]', toc) : [], map = {};
     links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
     var targets = Object.keys(map).map(function (id) { return doc.getElementById(id); }).filter(Boolean);
-    var body = doc.querySelector('.art__grid'), ticking = false;
+    var body = doc.querySelector('.art') || doc.querySelector('.art__grid'), ticking = false;
     function update() {
       ticking = false;
       var y = global.scrollY || doc.documentElement.scrollTop, line = y + global.innerHeight * 0.3, cur = null;
@@ -210,6 +210,131 @@
     update();
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); }
+  /* ---------------------------------------------------------------- v4: 動き（理解を助けるものだけ。素の JS）
+   * どれも「JS が無い・動きを減らす設定」のときは、CSS だけで最終の状態が出る（ここでクラスを付けたときだけ動く）。
+   *   HERO compare（slider）: .is-live を付けて 1 台に重ね、--pos（0〜100%）でつまみの位置を決める。指・マウス・キーボード。
+   *   HERO compare（toggle）: .is-live と data-show（before / after）。画面に入ったら 1 回だけ after へ。
+   *   HERO chat: .is-armed を付け、吹き出し（.hx__line）に順に .is-in。「もう一度見る」で再生。くり返さない。
+   *   3 つの光（[data-lights]）: .is-armed のあと .is-k → .is-f → .is-b。
+   *   Scroll Reveal: .rv を付け、画面に入ったら .is-in。 */
+  var reduce = !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var hasIO = 'IntersectionObserver' in global;
+
+  function onView(el, fn, threshold) {
+    if (!el) return;
+    if (!hasIO) { fn(); return; }
+    var io = new global.IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { io.disconnect(); fn(); } });
+    }, { threshold: threshold == null ? 0.5 : threshold });
+    io.observe(el);
+  }
+
+  function initCompare() {
+    all('[data-hero="compare"]').forEach(function (root) {
+      var stage = root.querySelector('.hc__stage');
+      if (!stage) return;
+      if (root.getAttribute('data-mode') === 'toggle') {
+        var btns = all('.hc__sw', root), touched = false;
+        var show = function (w) {
+          root.setAttribute('data-show', w); root.setAttribute('data-lean', w);
+          btns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-show') === w ? 'true' : 'false'); });
+        };
+        root.classList.add('is-live');
+        btns.forEach(function (b) { b.addEventListener('click', function () { touched = true; show(b.getAttribute('data-show')); }); });
+        stage.addEventListener('click', function () { touched = true; show(root.getAttribute('data-show') === 'after' ? 'before' : 'after'); });
+        if (reduce) { show('after'); return; }
+        show('before');
+        onView(stage, function () { setTimeout(function () { if (!touched) show('after'); }, 900); }, 0.6);
+        return;
+      }
+      if (reduce) return;  /* 動きを減らす設定: 左右に並べたまま */
+      var range = root.querySelector('.hc__range'), dragging = false, used = false;
+      var set = function (v, fromRange) {
+        v = Math.max(0, Math.min(100, v));
+        root.style.setProperty('--pos', v + '%');
+        var lean = v > 62 ? 'before' : (v < 38 ? 'after' : '');
+        if (lean) root.setAttribute('data-lean', lean); else root.removeAttribute('data-lean');
+        if (range && !fromRange) range.value = String(Math.round(v));
+      };
+      var at = function (e) { var r = stage.getBoundingClientRect(); if (r.width) set((e.clientX - r.left) / r.width * 100); };
+      var stop = function () { dragging = false; root.classList.remove('is-drag'); };
+      root.classList.add('is-live');
+      set(50);
+      if (range) {
+        range.addEventListener('input', function () { used = true; root.classList.remove('is-hint'); set(Number(range.value), true); });
+      }
+      stage.addEventListener('pointerdown', function (e) {
+        if (e.button) return;
+        dragging = true; used = true;
+        root.classList.remove('is-hint'); root.classList.add('is-drag');
+        try { stage.setPointerCapture(e.pointerId); } catch (err) { /* 何もしない */ }
+        at(e);
+        if (e.pointerType === 'mouse') e.preventDefault();
+      });
+      stage.addEventListener('pointermove', function (e) { if (dragging) at(e); });
+      stage.addEventListener('pointerup', stop);
+      stage.addEventListener('pointercancel', stop);
+      stage.addEventListener('dragstart', function (e) { e.preventDefault(); });
+      /* 画面に入ったら 1 回だけ、つまみを少し左右に振って「動かせる」ことを見せる */
+      onView(stage, function () {
+        var steps = [[500, 68], [1150, 34], [1800, 50]];
+        steps.forEach(function (s) { setTimeout(function () { if (used) return; root.classList.add('is-hint'); set(s[1]); }, s[0]); });
+        setTimeout(function () { root.classList.remove('is-hint'); }, 2500);
+      }, 0.6);
+    });
+  }
+
+  function initChat() {
+    all('[data-hero="chat"]').forEach(function (root) {
+      var lines = all('.hx__line', root), stages = all('.hx__stage', root), btn = root.querySelector('.hx__replay'), timers = [];
+      if (!lines.length) return;
+      if (reduce) { if (btn) btn.hidden = true; return; }
+      var mark = function (n) {
+        lines.forEach(function (li, i) { li.classList.toggle('is-in', i < n); });
+        stages.forEach(function (st) { st.classList.toggle('is-on', n >= Number(st.getAttribute('data-start'))); });
+      };
+      var play = function () {
+        timers.forEach(clearTimeout); timers = [];
+        root.classList.add('is-armed');
+        mark(1);  /* 最初は「入室」だけ */
+        lines.forEach(function (li, i) { if (i) timers.push(setTimeout(function () { mark(i + 1); }, 600 + (i - 1) * 480)); });
+      };
+      root.classList.add('is-armed');
+      mark(1);
+      onView(root.querySelector('.hx__phone'), play, 0.55);
+      if (btn) btn.addEventListener('click', play);
+    });
+  }
+
+  function initLights() {
+    all('[data-lights]').forEach(function (root) {
+      var btn = root.querySelector('[data-lights-replay]'), timers = [];
+      if (reduce) { if (btn) btn.hidden = true; return; }
+      var play = function () {
+        timers.forEach(clearTimeout); timers = [];
+        root.classList.add('is-armed');
+        root.classList.remove('is-k', 'is-f', 'is-b');
+        ['is-k', 'is-f', 'is-b'].forEach(function (c, i) { timers.push(setTimeout(function () { root.classList.add(c); }, 500 + i * 700)); });
+      };
+      root.classList.add('is-armed');
+      onView(root.querySelector('.dgs__fig'), play, 0.5);
+      if (btn) btn.addEventListener('click', play);
+    });
+  }
+
+  var REVEAL = '.kb__book, .oc__h, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .pro__item, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
+  function initReveal() {
+    if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
+    var io = new global.IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0 });
+    var add = function (el, delay) { el.classList.add('rv'); if (delay) el.style.setProperty('--rv-d', delay + 'ms'); io.observe(el); };
+    all(REVEAL).forEach(function (el) { add(el, 0); });
+    all('[data-reveal="steps"]').forEach(function (list) {
+      Array.prototype.forEach.call(list.children, function (li, i) { add(li, Math.min(i, 6) * 70); });
+    });
+  }
+
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
