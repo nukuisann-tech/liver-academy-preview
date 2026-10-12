@@ -1,5 +1,5 @@
 /* contents.js — CONTENT LIBRARY と Content Article の動き。
- * 本文はすべて HTML に入っている。ここは「絞り込み・保存（MISSION・CLEAR のチェック）・STEP の進み具合・コピー」を足すだけ。
+ * 本文はすべて HTML に入っている。ここは「絞り込み・保存（試すこと・できた目安のチェック）・STEP の進み具合・コピー」を足すだけ。
  *
  * 保存の窓口は CTStore の 1 か所だけ（ほかの場所で localStorage を直接触らない）。
  * 既存サイトの LEAStore（assets/js/store.js）と同じ 6 つの関数（get / set / list / remove / export / clear）で、
@@ -82,7 +82,7 @@
           var boxes = fields.filter(function (el) { return el.type === 'checkbox'; });
           counter.textContent = boxes.filter(function (el) { return el.checked; }).length + ' / ' + boxes.length;
         }
-        /* MISSION の進み具合・CLEAR の表示（チェックが全部付いたら is-done） */
+        /* 「試すこと」の進み具合・「できた目安」の表示（チェックが全部付いたら is-done） */
         var cbs = fields.filter(function (el) { return el.type === 'checkbox'; });
         if (cbs.length) {
           var on = cbs.filter(function (el) { return el.checked; }).length;
@@ -213,8 +213,10 @@
   /* ---------------------------------------------------------------- v4: 動き（理解を助けるものだけ。素の JS）
    * どれも「JS が無い・動きを減らす設定」のときは、CSS だけで最終の状態が出る（ここでクラスを付けたときだけ動く）。
    *   HERO compare（slider）: .is-live を付けて 1 台に重ね、--pos（0〜100%）でつまみの位置を決める。指・マウス・キーボード。
+   *     注釈（.hc__memo）: data-note（before / after / both）。つまみが半分より右なら before 側、左なら after 側の注釈だけを出す。
    *   HERO compare（toggle）: .is-live と data-show（before / after）。画面に入ったら 1 回だけ after へ。
    *   HERO chat: .is-armed を付け、吹き出し（.hx__line）に順に .is-in。「もう一度見る」で再生。くり返さない。
+   *     意味（.hx__m）: 吹き出しが出るのに合わせて、決まった場所に 1 つだけ .is-now（同時に 2 つ出さない）。
    *   3 つの光（[data-lights]）: .is-armed のあと .is-k → .is-f → .is-b。
    *   Scroll Reveal: .rv を付け、画面に入ったら .is-in。 */
   var reduce = !!(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -254,6 +256,7 @@
         root.style.setProperty('--pos', v + '%');
         var lean = v > 62 ? 'before' : (v < 38 ? 'after' : '');
         if (lean) root.setAttribute('data-lean', lean); else root.removeAttribute('data-lean');
+        root.setAttribute('data-note', v > 50 ? 'before' : (v < 50 ? 'after' : 'both'));
         if (range && !fromRange) range.value = String(Math.round(v));
       };
       var at = function (e) { var r = stage.getBoundingClientRect(); if (r.width) set((e.clientX - r.left) / r.width * 100); };
@@ -287,17 +290,30 @@
   function initChat() {
     all('[data-hero="chat"]').forEach(function (root) {
       var lines = all('.hx__line', root), stages = all('.hx__stage', root), btn = root.querySelector('.hx__replay'), timers = [];
+      var means = all('.hx__m', root), meanBox = root.querySelector('.hx__mean');
       if (!lines.length) return;
       if (reduce) { if (btn) btn.hidden = true; return; }
+      var meanOf = function (i) { for (var k = 0; k < means.length; k++) if (Number(means[k].getAttribute('data-i')) === i) return means[k]; return null; };
       var mark = function (n) {
         lines.forEach(function (li, i) { li.classList.toggle('is-in', i < n); });
         stages.forEach(function (st) { st.classList.toggle('is-on', n >= Number(st.getAttribute('data-start'))); });
+        /* 意味は「いちばん新しく出た、意味つきの吹き出し」の 1 つだけ */
+        var now = 0;
+        means.forEach(function (m) { var i = Number(m.getAttribute('data-i')); if (i <= n && i > now) now = i; });
+        means.forEach(function (m) { m.classList.toggle('is-now', Number(m.getAttribute('data-i')) === now); });
+        lines.forEach(function (li, i) { li.classList.toggle('is-now', i + 1 === now); });
+        if (meanBox) meanBox.classList.toggle('has-now', !!now);
       };
       var play = function () {
         timers.forEach(clearTimeout); timers = [];
         root.classList.add('is-armed');
         mark(1);  /* 最初は「入室」だけ */
-        lines.forEach(function (li, i) { if (i) timers.push(setTimeout(function () { mark(i + 1); }, 600 + (i - 1) * 480)); });
+        var t = 700;
+        lines.forEach(function (li, i) {
+          if (!i) return;
+          timers.push(setTimeout(function () { mark(i + 1); }, t));
+          t += meanOf(i + 1) ? 1500 : 800;  /* 意味が出る吹き出しのあとは、読む間を取る */
+        });
       };
       root.classList.add('is-armed');
       mark(1);
@@ -322,7 +338,7 @@
     });
   }
 
-  var REVEAL = '.kb__book, .oc__h, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .pro__item, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
+  var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
     var io = new global.IntersectionObserver(function (es) {
