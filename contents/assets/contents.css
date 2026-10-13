@@ -1136,6 +1136,7 @@ html { scroll-padding-top: 0; }
 .dgc__sub { display: block; margin-top: 2px; font-size: 0.875rem; line-height: 1.65; color: var(--c-ink-2); }
 .dgc__node.is-goal { background: var(--c-ink); border-color: var(--c-ink); color: var(--c-on-dark); }
 .dgc__node.is-goal .dgc__n { background: var(--c-marker); color: var(--c-ink); }
+.dgc__node.is-goal .dgc__sub { color: var(--c-on-dark-2); }  /* 到達点の補足は、濃い面の上で読める色に */
 .dgc--calm .dgc__node:not(.is-goal) { background: var(--c-surface-2); border-color: transparent; }
 .dgc--calm .dgc__n { background: var(--c-surface); }
 .dgc strong, .dgl strong, .dgt strong { background: none; }
