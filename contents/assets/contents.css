@@ -110,7 +110,7 @@ textarea:focus, input[type="text"]:focus { outline: 3px solid var(--c-focus); ou
 .lib__count { font-size: var(--fs-sm); font-weight: var(--fw-medium); color: var(--c-ink-3); letter-spacing: 0.02em; }
 .lib__count strong { background: none; font-family: var(--font-num); font-weight: var(--fw-bold); color: var(--c-ink-2); margin-right: 2px; }
 .filter { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
-.chip { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 40px; padding: 0 var(--sp-4); border-radius: var(--r-pill); border: var(--bw) solid var(--c-line-strong); background: transparent; font-size: var(--fs-sm); font-weight: var(--fw-medium); line-height: 1.3; transition: border-color var(--dur), background var(--dur); }
+.chip { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; padding: 0 var(--sp-4); border-radius: var(--r-pill); border: var(--bw) solid var(--c-line-strong); background: transparent; font-size: var(--fs-sm); font-weight: var(--fw-medium); line-height: 1.3; transition: border-color var(--dur), background var(--dur); }
 .chip:hover { border-color: var(--c-ink); }
 .chip__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--cat); }
 .chip__n { font-family: var(--font-num); font-size: var(--fs-xs); color: var(--c-ink-3); letter-spacing: 0; }
@@ -1856,4 +1856,113 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
   .kb__gd { width: 86px; top: -24px; }
   .pro__gd { width: 100px; }
   .ms__gd { width: 70px; }
+}
+
+
+/* =====================================================================================================
+   18 batch 02: 記事ごとの HERO（contents_tpl/hero2.py）。濃い面（FIRST VIEW）の上に置く。
+   JS がクラス（.is-live・.is-armed）を付けたときだけ動く。無いときは「全部出ている状態」。スマホは縦に積む。
+   ===================================================================================================== */
+.hv, .hb, .ht { margin: 0 auto; max-width: 520px; }
+.hv__h, .hb__kicker, .ht__axis { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em; line-height: 1.4; color: var(--c-on-dark-2); }
+
+/* ---- versus（ショート動画 ⇄ LIVE） */
+.hv__tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px var(--c-dark-line); }
+.hv__tab { background: transparent; min-height: 48px; border-radius: var(--r-pill); color: var(--c-on-dark-2); font-size: 0.9375rem; font-weight: 800; letter-spacing: 0.06em; transition: background var(--dur), color var(--dur); }
+.hv__tab[aria-pressed="true"] { background: var(--c-marker); color: var(--c-ink); }
+.hv__tab:focus-visible { outline-color: var(--c-marker); }
+.hv__stage { margin-top: 14px; display: grid; gap: 14px; }
+.hv__pane { padding: 20px 18px 18px; border-radius: 20px; background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 0 0 1px var(--c-dark-line); }
+.hv__pane--b { background: rgba(18, 165, 148, 0.14); box-shadow: inset 0 0 0 1.5px rgba(18, 165, 148, 0.55); }
+.hv__h { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: #fff; }
+.hv__live { padding: 4px 6px 3px; border-radius: 4px; background: var(--c-live); color: #fff; font-family: var(--font-num); font-size: 0.625rem; letter-spacing: 0.08em; line-height: 1; }
+.hv__one, .hv__loop { margin-top: 16px; display: grid; gap: 26px; justify-items: center; }
+.hv__node { position: relative; display: grid; place-items: center; min-height: 46px; padding: 8px 16px; border-radius: 14px; background: #fff; color: var(--c-ink); font-size: 0.9375rem; font-weight: 800; line-height: 1.4; text-align: center; }
+.hv__one .hv__node { min-width: 148px; background: #dfe3e8; }
+.hv__one .hv__node + .hv__node::before, .hv__pair + .hv__pair::before, .hv__goal::before { content: ""; position: absolute; left: 50%; top: -19px; width: 10px; height: 10px; margin-left: -5px; border-right: 2.5px solid var(--c-on-dark-2); border-bottom: 2.5px solid var(--c-on-dark-2); transform: rotate(45deg); }
+.hv__pair { position: relative; width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr); align-items: center; gap: 6px; }
+.hv__node--me { background: var(--c-marker); }
+.hv__node--you { background: #cfeef0; }
+.hv__swap { position: relative; height: 16px; }
+.hv__swap::before, .hv__swap::after { content: ""; position: absolute; left: 3px; right: 3px; height: 2.5px; background: #fff; border-radius: 2px; }
+.hv__swap::before { top: 2px; box-shadow: 0 0 0 0 #fff; clip-path: none; }
+.hv__swap::after { bottom: 2px; }
+.hv__pair .hv__swap { background:
+  linear-gradient(45deg, transparent 46%, #fff 46% 56%, transparent 56%) right 1px top -1px / 9px 9px no-repeat,
+  linear-gradient(-45deg, transparent 46%, #fff 46% 56%, transparent 56%) right 1px top 5px / 9px 9px no-repeat,
+  linear-gradient(-45deg, transparent 46%, #fff 46% 56%, transparent 56%) left 1px bottom 5px / 9px 9px no-repeat,
+  linear-gradient(45deg, transparent 46%, #fff 46% 56%, transparent 56%) left 1px bottom -1px / 9px 9px no-repeat; }
+.hv__goal { position: relative; width: 100%; }
+.hv__goal span { display: block; padding: 12px 16px; border-radius: 14px; background: var(--accent-teal-main); color: #fff; font-size: 1rem; font-weight: 800; text-align: center; line-height: 1.4; }
+.hv__say { margin-top: 16px; font-size: 0.9375rem; font-weight: 800; line-height: 1.5; text-align: center; color: #fff; }
+.hv__pane--a .hv__say { color: var(--c-on-dark-2); }
+.hv__hint, .hb__wait { margin-top: 12px; font-size: 0.75rem; text-align: center; color: var(--c-on-dark-2); }
+.hv.is-live[data-show="a"] .hv__pane--b, .hv.is-live[data-show="b"] .hv__pane--a { display: none; }
+.hv.is-live .hv__pane { min-height: 318px; display: flex; flex-direction: column; }
+.hv.is-live .hv__say { margin-top: auto; padding-top: 16px; }
+.hv.is-live .hv__pane li { opacity: 0; transform: translateY(10px); }
+.hv.is-live.is-in .hv__pane li { opacity: 1; transform: none; transition: opacity 0.35s ease calc(var(--i, 0) * 260ms + 80ms), transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i, 0) * 260ms + 80ms); }
+.hv.is-live.is-in .hv__one li { transition-delay: 60ms; }
+
+/* ---- builder（3 枚のパネル → 1 枚のカード） */
+.hb__panels { display: grid; gap: 8px; }
+.hb__panel { width: 100%; display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 10px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.07); box-shadow: inset 0 0 0 1px var(--c-dark-line); color: #fff; text-align: left; transition: background var(--dur), box-shadow var(--dur); }
+.hb__panel:focus-visible { outline-color: var(--c-marker); }
+.hb__no { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--c-marker); color: var(--c-ink); font-family: var(--font-num); font-size: 0.875rem; font-weight: 800; }
+.hb__main { flex: 1; min-width: 0; display: block; }
+.hb__title { display: block; font-size: 1rem; font-weight: 800; line-height: 1.4; }
+.hb__hint { display: block; margin-top: 1px; font-size: 0.75rem; line-height: 1.5; color: var(--c-on-dark-2); }
+.hb__pick { display: block; margin-top: 6px; padding: 6px 10px; border-radius: 9px; background: #fff; color: var(--c-ink); font-size: 0.875rem; font-weight: 800; line-height: 1.5; }
+.hb__mark { flex: none; width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--c-on-dark-2); position: relative; }
+.hb__panel[aria-expanded="true"] { background: rgba(18, 165, 148, 0.16); box-shadow: inset 0 0 0 1.5px rgba(18, 165, 148, 0.6); }
+.hb__panel[aria-expanded="true"] .hb__mark { background: var(--accent-teal-main); box-shadow: none; }
+.hb__panel[aria-expanded="true"] .hb__mark::after { content: ""; position: absolute; left: 7px; top: 4px; width: 6px; height: 10px; border-right: 2.5px solid #fff; border-bottom: 2.5px solid #fff; transform: rotate(45deg); }
+.hb__card { position: relative; margin-top: 16px; padding: 18px 18px 16px; border-radius: 18px; background: var(--c-marker); color: var(--c-ink); transform: rotate(-1.2deg); box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3); transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s, color 0.3s, box-shadow 0.3s; }
+.hb__kicker { color: #6a5300; }
+.hb__lead { margin-top: 8px; font-size: 0.8125rem; font-weight: 800; line-height: 1.4; }
+.hb__result { margin-top: 2px; font-size: 1.4375rem; font-weight: 800; line-height: 1.4; letter-spacing: 0.02em; }
+.hb__chips { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+.hb__chip { padding: 5px 10px 4px; border-radius: var(--r-pill); background: var(--c-ink); color: #fff; font-size: 0.75rem; font-weight: 800; line-height: 1.4; transition: opacity 0.3s, transform 0.3s; }
+.hb__memo { margin-top: 10px; font-size: 0.6875rem; line-height: 1.5; color: #6a5300; }
+.hb__wait { display: none; margin-top: 10px; text-align: left; color: var(--c-on-dark-2); }
+.hb__replay { background: transparent; display: block; margin: 14px auto 0; min-height: var(--tap); padding: 0 18px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1px var(--c-dark-line); color: #fff; font-size: 0.8125rem; font-weight: 800; }
+.hb__replay[hidden] { display: none; }
+.hb.is-armed .hb__panel[aria-expanded="false"] .hb__pick { display: none; }
+.hb.is-armed .hb__chip { opacity: 0; transform: scale(0.9); }
+.hb.is-armed .hb__chip.is-on { opacity: 1; transform: none; }
+.hb.is-armed:not(.is-done) .hb__card { background: rgba(255, 255, 255, 0.07); color: #fff; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.28); transform: none; }
+.hb.is-armed:not(.is-done) .hb__kicker { color: var(--c-on-dark-2); }
+.hb.is-armed:not(.is-done) .hb__lead, .hb.is-armed:not(.is-done) .hb__result, .hb.is-armed:not(.is-done) .hb__memo { display: none; }
+.hb.is-armed:not(.is-done) .hb__wait { display: block; }
+.hb.is-armed:not(.is-done) .hb__chip { background: #fff; color: var(--c-ink); }
+
+/* ---- timeline（LIVE の体験と、視聴者の気持ち） */
+.ht__axis { display: flex; justify-content: space-between; gap: 12px; padding: 0 2px 10px 30px; }
+.ht__rows { position: relative; display: grid; gap: 6px; }
+.ht__rows::before { content: ""; position: absolute; left: 9px; top: 18px; bottom: 18px; width: 2px; background: var(--c-dark-line); }
+.ht__row { --c: #8fd3ff; position: relative; display: grid; grid-template-columns: 20px minmax(0, 7.2em) minmax(0, 1fr); grid-template-areas: "dot label bar" "dot label feel"; column-gap: 10px; align-items: center; padding: 8px 12px 8px 0; border-radius: 12px; }
+.ht__row--up { --c: var(--c-marker); }
+.ht__row--bad { --c: #ff7a70; }
+.ht__row--back { --c: #5fd4c4; }
+.ht__row--goal { --c: var(--c-marker); }
+.ht__dot { grid-area: dot; position: relative; z-index: 1; width: 20px; height: 20px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 4px var(--c-dark); }
+.ht__label { grid-area: label; font-size: 0.9375rem; font-weight: 800; line-height: 1.4; color: #fff; }
+.ht__bar { grid-area: bar; display: block; height: 10px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.ht__bar i { display: block; width: var(--lv); height: 100%; border-radius: 5px; background: var(--c); }
+.ht__feel { grid-area: feel; margin-top: 4px; font-size: 0.8125rem; font-weight: 700; line-height: 1.4; color: var(--c); }
+.ht__row--goal { margin-top: 4px; padding: 12px 12px 12px 0; background: rgba(255, 226, 122, 0.12); }
+.ht__row--goal .ht__dot { box-shadow: 0 0 0 4px #2a2a24; }
+.ht__replay { background: transparent; display: block; margin: 14px auto 0; min-height: var(--tap); padding: 0 18px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1px var(--c-dark-line); color: #fff; font-size: 0.8125rem; font-weight: 800; }
+.ht.is-armed .ht__row { opacity: 0.28; }
+.ht.is-armed .ht__row .ht__bar i { width: 0; }
+.ht.is-armed .ht__row.is-on { opacity: 1; transition: opacity 0.3s ease; }
+.ht.is-armed .ht__row.is-on .ht__bar i { width: var(--lv); transition: width 0.45s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (min-width: 760px) {
+  .hv__stage { margin-top: 18px; }
+  .hv__pane { padding: 24px 24px 22px; }
+  .hb__result { font-size: 1.625rem; }
+  .ht__row { grid-template-columns: 20px minmax(0, 8.5em) minmax(0, 1fr); }
+}
+@media (min-width: 980px) {
+  .hv:not(.is-live) .hv__stage { grid-template-columns: 1fr 1fr; }
 }

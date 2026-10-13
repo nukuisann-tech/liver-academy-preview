@@ -48,7 +48,7 @@
 
   /* ---------------------------------------------------------------- Library: カテゴリの絞り込み */
   function initFilter() {
-    var chips = all('.chip[data-filter]'), cards = all('#cards > .card'), count = doc.getElementById('count');
+    var chips = all('.chip[data-filter]'), cards = all('#cards > li'), count = doc.getElementById('count');
     if (!chips.length || !cards.length) return;
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
@@ -338,6 +338,65 @@
     });
   }
 
+  /* ---------------------------------------------------------------- batch 02: 記事ごとの HERO（contents_tpl/hero2.py）
+   *   versus  : .is-live と data-show（a / b）。画面に入ったら 1 回だけ a → b へ。切り替えるたびに .is-in を付け直して、順に出す。
+   *   builder : .is-armed でパネルを閉じる。3 枚とも開くと .is-done（カードが完成）。
+   *   timeline: .is-armed のあと、行に順に .is-on。くり返さない。 */
+  function initVersus() {
+    all('[data-hero="versus"]').forEach(function (root) {
+      var tabs = all('.hv__tab', root), touched = false;
+      var show = function (w) {
+        root.setAttribute('data-show', w);
+        tabs.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-show') === w ? 'true' : 'false'); });
+        root.classList.remove('is-in');
+        global.requestAnimationFrame(function () { global.requestAnimationFrame(function () { root.classList.add('is-in'); }); });
+      };
+      root.classList.add('is-live');
+      tabs.forEach(function (b) { b.addEventListener('click', function () { touched = true; show(b.getAttribute('data-show')); }); });
+      if (reduce) { show('b'); return; }
+      show('a');
+      onView(root, function () { setTimeout(function () { if (!touched) show('b'); }, 1100); }, 0.6);
+    });
+  }
+
+  function initBuilder() {
+    all('[data-hero="builder"]').forEach(function (root) {
+      var panels = all('.hb__panel', root), chips = all('.hb__chip', root), replay = root.querySelector('.hb__replay');
+      if (!panels.length) return;
+      var sync = function () {
+        var n = 0;
+        panels.forEach(function (p, i) {
+          var open = p.getAttribute('aria-expanded') === 'true';
+          if (open) n++;
+          if (chips[i]) chips[i].classList.toggle('is-on', open);
+        });
+        root.classList.toggle('is-done', n === panels.length);
+        if (replay) replay.hidden = n !== panels.length;
+      };
+      var reset = function () { panels.forEach(function (p) { p.setAttribute('aria-expanded', 'false'); }); sync(); };
+      root.classList.add('is-armed');
+      panels.forEach(function (p) { p.addEventListener('click', function () { p.setAttribute('aria-expanded', p.getAttribute('aria-expanded') === 'true' ? 'false' : 'true'); sync(); }); });
+      if (replay) replay.addEventListener('click', function () { reset(); panels[0].focus(); });
+      reset();
+    });
+  }
+
+  function initTimeline() {
+    all('[data-hero="timeline"]').forEach(function (root) {
+      var rows = all('.ht__row', root), btn = root.querySelector('.ht__replay'), timers = [];
+      if (reduce) { if (btn) btn.hidden = true; return; }
+      var play = function () {
+        timers.forEach(clearTimeout); timers = [];
+        root.classList.add('is-armed');
+        rows.forEach(function (r) { r.classList.remove('is-on'); });
+        rows.forEach(function (r, i) { timers.push(setTimeout(function () { r.classList.add('is-on'); }, 350 + i * 420)); });
+      };
+      root.classList.add('is-armed');
+      onView(root, play, 0.3);
+      if (btn) btn.addEventListener('click', play);
+    });
+  }
+
   var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
@@ -351,6 +410,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
