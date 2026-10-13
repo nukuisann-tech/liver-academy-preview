@@ -447,6 +447,34 @@
     });
   }
 
+  /* batch 03: lightlab（光の位置の切替。data-show）と bgbuilder（背景の層を 1 つずつ足す。.is-l1〜3 と .is-full） */
+  function initLightLab() {
+    all('[data-hero="lightlab"]').forEach(function (root) {
+      var tabs = all('.ll__tab', root);
+      root.classList.add('is-live');
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          root.setAttribute('data-show', t.getAttribute('data-k'));
+          tabs.forEach(function (x) { x.setAttribute('aria-pressed', x === t ? 'true' : 'false'); });
+        });
+      });
+    });
+  }
+
+  function initBgBuilder() {
+    all('[data-hero="bgbuilder"]').forEach(function (root) {
+      var btns = all('.bb__btn', root);
+      var sync = function () {
+        var n = 0;
+        btns.forEach(function (b) { var on = b.getAttribute('aria-pressed') === 'true'; root.classList.toggle('is-l' + b.getAttribute('data-i'), on); if (on) n++; });
+        root.classList.toggle('is-full', n === btns.length);
+      };
+      root.classList.add('is-live');
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', function () { b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'); sync(); }); });
+      sync();
+    });
+  }
+
   var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
@@ -460,6 +488,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
