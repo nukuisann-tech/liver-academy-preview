@@ -1840,3 +1840,20 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
   .crs__list--n3 .shc__body, .crs__list--n2 .shc__body { padding: 20px 4px 0; }
   .crs__list--n3 .shc__link:hover .shc__thumb img, .crs__list--n2 .shc__link:hover .shc__thumb img { transform: none; }
 }
+
+
+/* =====================================================================================================
+   17 v9: ライバー案内役キャラ（contents_tpl/chara.py）の大きさ
+   ===================================================================================================== */
+.shw__gd { width: 104px; }
+.shw__say { margin-bottom: 64px; }
+.kb__gd { width: 62px; top: -16px; transform: none; }
+.pro__gd { width: 68px; }
+.ms__gd { width: 54px; margin: -8px 0 -8px -4px; }
+@media (min-width: 760px) {
+  .shw__gd { width: 176px; }
+  .shw__say { margin-bottom: 0; }
+  .kb__gd { width: 86px; top: -24px; }
+  .pro__gd { width: 100px; }
+  .ms__gd { width: 70px; }
+}
