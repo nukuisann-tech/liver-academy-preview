@@ -90,6 +90,7 @@
           box.classList.toggle('is-done', on === cbs.length);
         }
         updateBuilder(box);
+        updateWorkshop(box);
         fields.forEach(autoGrow);
       }
       function save() {
@@ -158,6 +159,55 @@
     text = text.replace(/[\s｜|／\/・、]*\u0000[\s｜|／\/・、]*/g, function (m) { return /\n/.test(m) ? '\n' : '\u0001'; })
                .replace(/^\u0001|\u0001$/gm, '').replace(/\u0001/g, '｜').replace(/\n{2,}/g, '\n').trim();
     out.textContent = text;
+  }
+
+  /* ワークショップ（batch 02）: 書いた文字を、下のカードへ並べるだけ（生成はしない）。選択は data-max 個まで。 */
+  function updateWorkshop(box) {
+    if (!box.hasAttribute('data-workshop')) return;
+    var val = function (k) { var el = box.querySelector('[data-field="' + k + '"]'); return el ? el.value.trim() : ''; };
+    all('.wk__row--choices', box).forEach(function (row) {
+      var max = Number(row.getAttribute('data-max')) || 3, cbs = all('input[type="checkbox"]', row);
+      var on = cbs.filter(function (c) { return c.checked; }).length;
+      cbs.forEach(function (c) { c.disabled = !c.checked && on >= max; });
+    });
+    var filled = 0;
+    all('[data-out]', box).forEach(function (dd) {
+      var v = val(dd.getAttribute('data-out')) || (dd.getAttribute('data-alt') ? val(dd.getAttribute('data-alt')) : '');
+      dd.textContent = v || dd.getAttribute('data-empty') || '';
+      dd.classList.toggle('is-empty', !v);
+      if (v) filled++;
+    });
+    all('[data-out-chips]', box).forEach(function (ul) {
+      var k = ul.getAttribute('data-out-chips');
+      var picked = all('input[data-choice="' + k + '"]', box).filter(function (c) { return c.checked; });
+      ul.textContent = '';
+      picked.forEach(function (c) { var li = doc.createElement('li'); li.textContent = c.getAttribute('data-label'); ul.appendChild(li); });
+      if (!picked.length && ul.getAttribute('data-empty')) { var e = doc.createElement('li'); e.className = 'is-empty'; e.textContent = ul.getAttribute('data-empty'); ul.appendChild(e); }
+      if (picked.length) filled++;
+    });
+    all('[data-out-line]', box).forEach(function (p) {
+      var missing = false;
+      var text = (p.getAttribute('data-out-line') || '').replace(/\{(\w+)\}/g, function (m, k) { var v = val(k); if (!v) missing = true; return v; });
+      p.textContent = missing ? (p.getAttribute('data-empty') || '') : text;
+      p.classList.toggle('is-empty', missing);
+    });
+    var card = box.querySelector('.wk__card');
+    if (card) card.classList.toggle('is-on', filled > 0);
+  }
+
+  /* 切り替えて見くらべる（batch 02 の switch）: .is-live のとき、選んだ 1 枚だけを出す。 */
+  function initSwitch() {
+    all('[data-switch]').forEach(function (root) {
+      var tabs = all('.sw__tab', root), panes = all('.sw__pane', root);
+      if (tabs.length < 2) return;
+      var show = function (i) {
+        tabs.forEach(function (t, k) { t.setAttribute('aria-pressed', k === i ? 'true' : 'false'); });
+        panes.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      };
+      root.classList.add('is-live');
+      tabs.forEach(function (t, i) { t.addEventListener('click', function () { show(i); }); });
+      show(0);
+    });
   }
 
   /* ---------------------------------------------------------------- コピー */
@@ -410,6 +460,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
