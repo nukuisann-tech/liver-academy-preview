@@ -205,7 +205,16 @@
         panes.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
       };
       root.classList.add('is-live');
-      tabs.forEach(function (t, i) { t.addEventListener('click', function () { show(i); }); });
+      tabs.forEach(function (t, i) {
+        t.addEventListener('click', function () { show(i); });
+        t.addEventListener('keydown', function (e) {  /* 左右の矢印キーで、となりのタブへ */
+          var k = e.key === 'ArrowRight' ? 1 : (e.key === 'ArrowLeft' ? -1 : 0);
+          if (!k) return;
+          e.preventDefault();
+          var n = (i + k + tabs.length) % tabs.length;
+          show(n); tabs[n].focus();
+        });
+      });
       show(0);
     });
   }
