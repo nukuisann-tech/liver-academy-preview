@@ -1623,7 +1623,7 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
   .kb__spine::before { left: 9px; }
   .kb__h { font-size: 1.625rem; }
   .kb__cards { margin-top: 24px; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-  .kb__cards--n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kb__cards--n2, .kb__cards--n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .kc { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; row-gap: 14px; padding: 18px 16px 16px; }
   .kc__main { align-self: start; }
   .kc__why { grid-column: 1; }
@@ -2369,7 +2369,7 @@ a.or__a:hover { background: var(--cat-soft); }
 .or__goal { margin-top: 12px; display: flex; gap: 8px; align-items: flex-start; font-size: 0.875rem; font-weight: 700; line-height: 1.7; color: var(--c-ink-2); }
 .or__goal .ico { margin-top: 4px; color: var(--cat-deep); }
 .sbar--spine .sbar__list a { gap: 6px; }
-.sbar--spine .sbar__t { display: block; max-width: 8.5em; }
+.sbar--spine .sbar__t { display: block; max-width: 9em; }
 @media (max-width: 420px) { .sbar--spine .sbar__list a:not([aria-current="true"]) .sbar__t { display: none; } }
 
 .sec--spine .sec__kicker--ph { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
@@ -2497,3 +2497,10 @@ a.or__a:hover { background: var(--cat-soft); }
 @media (min-width: 980px) {
   .ls__item { grid-template-columns: 110px minmax(0, 1fr); padding: 14px; }
 }
+
+/* GOLD RESTORE（D-064）: 次の配信で試すこと＝まずはこれ 1 つ＋できたら／できた目安の「さらに上」 */
+.ms__tag { display: inline-block; margin-right: 8px; padding: 1px 8px; border-radius: var(--r-pill); background: var(--c-surface-2); font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.04em; color: var(--c-ink-3); vertical-align: 2px; }
+.ms__tag--main { background: var(--c-ink); color: var(--c-marker); }
+.ms__item--main .ms__do { font-weight: 800; }
+.clr__plus { margin-top: 14px; padding-top: 12px; border-top: 1px dashed currentColor; display: flex; flex-direction: column; gap: 4px; font-size: 0.9375rem; line-height: 1.7; opacity: 0.92; }
+.clr__plabel { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; }
