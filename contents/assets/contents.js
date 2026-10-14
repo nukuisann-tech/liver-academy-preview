@@ -65,7 +65,8 @@
   }
 
   /* ---------------------------------------------------------------- 記入・チェックの保存（data-save の入れ物ごとに 1 件） */
-  function fieldValue(el) { return el.type === 'checkbox' ? el.checked : el.value; }
+  function isTick(el) { return el.type === 'checkbox' || el.type === 'radio'; }
+  function fieldValue(el) { return isTick(el) ? el.checked : el.value; }
 
   function initSaves() {
     all('[data-save]').forEach(function (box) {
@@ -75,7 +76,7 @@
       var note = tool ? tool.querySelector('[data-saved-msg]') : null;
       var counter = box.querySelector('[data-count]');
       var timer = null;
-      fields.forEach(function (el) { el.setAttribute('data-default', el.type === 'checkbox' ? '' : el.value); });
+      fields.forEach(function (el) { el.setAttribute('data-default', isTick(el) ? '' : el.value); });
 
       function refresh() {
         if (counter) {
@@ -91,12 +92,13 @@
         }
         updateBuilder(box);
         updateWorkshop(box);
+        updateReflect(box);
         fields.forEach(autoGrow);
       }
       function save() {
         var data = {}, any = false;
         fields.forEach(function (el) {
-          var v = fieldValue(el), def = el.type === 'checkbox' ? false : el.getAttribute('data-default');
+          var v = fieldValue(el), def = isTick(el) ? false : el.getAttribute('data-default');
           if (v !== def) { data[el.getAttribute('data-field')] = v; any = true; }
         });
         var done = any ? CTStore.set(key, { values: data, updatedAt: new Date().toISOString() }) : CTStore.remove(key);
@@ -111,7 +113,7 @@
         fields.forEach(function (el) {
           var k = el.getAttribute('data-field');
           if (!Object.prototype.hasOwnProperty.call(values, k)) return;
-          if (el.type === 'checkbox') el.checked = !!values[k]; else el.value = String(values[k]);
+          if (isTick(el)) el.checked = !!values[k]; else el.value = String(values[k]);
         });
         refresh();
       });
@@ -132,7 +134,7 @@
         var clear = tool.querySelector('[data-clear]');
         if (clear) clear.addEventListener('click', function () {
           if (!global.confirm('この道具に書いた内容を消します。よろしいですか？')) return;
-          fields.forEach(function (el) { if (el.type === 'checkbox') el.checked = false; else el.value = el.getAttribute('data-default'); });
+          fields.forEach(function (el) { if (isTick(el)) el.checked = false; else el.value = el.getAttribute('data-default'); });
           refresh();
           CTStore.remove(key).then(function () { if (note) { note.textContent = '消しました'; note.classList.remove('is-on'); } });
         });
@@ -202,8 +204,65 @@
       var labels = all('input[data-choice="' + bk + '"]', box).filter(function (c) { return c.checked; }).map(function (c) { return c.getAttribute('data-label'); });
       CTStore.set('bridge/' + box.getAttribute('data-bridge'), { labels: labels, updatedAt: new Date().toISOString() });
     }
+    if (box.hasAttribute('data-bridge-fields')) {  /* 書いた欄の値を、そのまま次の記事へ（例: MY CREATOR ADVANTAGE → CT-014） */
+      var vals = {}, anyv = false;
+      box.getAttribute('data-bridge-fields').split('|').forEach(function (k) { vals[k] = val(k); if (vals[k]) anyv = true; });
+      if (anyv) CTStore.set('bridge/' + box.getAttribute('data-bridge'), { values: vals, updatedAt: new Date().toISOString() });
+      else CTStore.remove('bridge/' + box.getAttribute('data-bridge'));
+    }
     var card = box.querySelector('.wk__card');
     if (card) card.classList.toggle('is-on', filled > 0);
+  }
+
+  /* ふり返り（v3）: はい／いいえを選ぶと、その答えへの一言だけを出す */
+  function updateReflect(box) {
+    if (!box.classList.contains('rf')) return;
+    var on = all('input[type="radio"]', box).filter(function (r) { return r.checked; })[0];
+    all('[data-reply]', box).forEach(function (p) { p.hidden = !on || p.getAttribute('data-reply') !== on.getAttribute('data-v'); });
+  }
+
+  /* 別の記事で保存したものから、最初の値を入れる（data-from="<bridge の key>:<欄>"）。書き換えた欄は上書きしない。
+     replace: この値のどれかが入っている欄は、自動で入れたものとみなして入れ替える（診断を答え直したとき）。 */
+  function fillFrom(replace) {
+    var els = all('[data-from]');
+    if (!els.length) return;
+    var keys = {};
+    els.forEach(function (el) { keys[el.getAttribute('data-from').split(':')[0]] = 1; });
+    Promise.all(Object.keys(keys).map(function (k) { return CTStore.get('bridge/' + k).then(function (r) { return [k, r]; }); })).then(function (rs) {
+      var recs = {};
+      rs.forEach(function (x) { recs[x[0]] = x[1]; });
+      els.forEach(function (el) {
+        var p = el.getAttribute('data-from').split(':'), r = recs[p[0]];
+        if (!r) return;
+        var v = r.values && r.values[p[1]] ? r.values[p[1]] : r[p[1]];
+        if (!v) return;
+        var cur = el.value, auto = el.getAttribute('data-auto');
+        if (cur === v) { el.setAttribute('data-auto', v); return; }
+        if (cur === '' || cur === auto || (replace && replace.indexOf(cur) >= 0)) {
+          el.value = v; el.setAttribute('data-auto', v);
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+    });
+  }
+
+  /* 前の記事の成果物を見せる（v3 の recall）。もう一度入力させない。保存が無いときは、前の記事への案内だけ。 */
+  function initRecall() {
+    all('[data-recall]').forEach(function (root) {
+      var key = root.getAttribute('data-recall'), fb = root.getAttribute('data-fallback');
+      Promise.all([CTStore.get('bridge/' + key), fb ? CTStore.get('bridge/' + fb) : Promise.resolve(null)]).then(function (r) {
+        var vals = (r[0] && r[0].values) || {}, st = r[1] || {}, n = 0;
+        all('[data-r]', root).forEach(function (dd) {
+          var k = dd.getAttribute('data-r'), v = vals[k] || st[dd.getAttribute('data-alt') || k] || '';
+          dd.textContent = v; dd.parentNode.hidden = !v; if (v) n++;
+        });
+        var rows = root.querySelector('.rc__rows'), empty = root.querySelector('.rc__empty'), go = root.querySelector('.rc__go');
+        if (rows) rows.hidden = !n;
+        if (empty) empty.hidden = !!n;
+        if (go) go.hidden = !!n;
+        root.classList.toggle('is-filled', !!n);
+      });
+    });
   }
 
   /* 切り替えて見くらべる（batch 02 の switch）: .is-live のとき、選んだ 1 枚だけを出す。 */
@@ -576,11 +635,15 @@
         put('experience', (P.experience || '') + (secondary && S.experience ? '　＋　' + S.experience : ''));
         put('try', P.try || '');
         card.hidden = false; wait.hidden = true;
-        if (save) CTStore.set('bridge/style', { primary: primary, secondary: secondary, answers: ans, updatedAt: new Date().toISOString() });
+        if (save) {
+          CTStore.set('bridge/style', { primary: primary, secondary: secondary, primaryName: P.name || '', secondaryName: S.name || '', answers: ans, updatedAt: new Date().toISOString() })
+            .then(function () { fillFrom(order.map(function (k) { return (styles[k] || {}).name; })); });
+        }
       };
       opts.forEach(function (o) { o.addEventListener('click', function () { ans[o.getAttribute('data-q')] = o.getAttribute('data-v'); show(true); }); });
       var reset = root.querySelector('.cp__reset');
       if (reset) reset.addEventListener('click', function () { ans = {}; CTStore.remove('bridge/style'); show(false); if (opts[0]) opts[0].focus(); });
+      root.setAttribute('data-ready', '1');
       root.classList.add('is-live');
       CTStore.get('bridge/style').then(function (rec) { if (rec && rec.answers) ans = rec.answers; show(false); });
     });
@@ -618,7 +681,7 @@
     });
   }
 
-  var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
+  var REVEAL = '.kb__book, .oc__say, .ov, .or, .sec__head, .sec > .b, .sec__bridge, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
     var io = new global.IntersectionObserver(function (es) {
@@ -631,6 +694,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initJoin(); initBridge(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
