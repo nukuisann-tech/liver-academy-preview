@@ -166,7 +166,11 @@
   /* ワークショップ（batch 02）: 書いた文字を、下のカードへ並べるだけ（生成はしない）。選択は data-max 個まで。 */
   function updateWorkshop(box) {
     if (!box.hasAttribute('data-workshop')) return;
-    var val = function (k) { var el = box.querySelector('[data-field="' + k + '"]'); return el ? el.value.trim() : ''; };
+    var val = function (k) {
+      var el = box.querySelector('[data-field="' + k + '"]');
+      if (el) return el.value.trim();
+      return all('input[data-choice="' + k + '"]', box).filter(function (c) { return c.checked; }).map(function (c) { return c.getAttribute('data-label'); }).join('・');
+    };
     all('.wk__row--choices', box).forEach(function (row) {
       var max = Number(row.getAttribute('data-max')) || 3, cbs = all('input[type="checkbox"]', row);
       var on = cbs.filter(function (c) { return c.checked; }).length;
@@ -198,6 +202,10 @@
       var y = pick(mx.getAttribute('data-mx-y')), x = pick(mx.getAttribute('data-mx-x'));
       all('.wk__cell', mx).forEach(function (cell) { cell.classList.toggle('is-on', y !== null && x !== null && cell.getAttribute('data-cell') === y + x); });
       mx.classList.toggle('is-picked', y !== null && x !== null);
+    });
+    all('.wk__fb', box).forEach(function (p) {  /* 選んだものへの一言（正解・不正解ではなく、誰に何が伝わるか） */
+      var c = box.querySelector('input[data-choice="' + p.getAttribute('data-fb-key') + '"][data-idx="' + p.getAttribute('data-fb-idx') + '"]');
+      p.hidden = !(c && c.checked);
     });
     if (box.hasAttribute('data-bridge')) {  /* ほかの記事で使う結果（例: 視聴者の欲しいもの → CT-014） */
       var bk = box.getAttribute('data-bridge-field');
@@ -649,6 +657,22 @@
     });
   }
 
+  function initRoom() {
+    all('[data-hero="room"]').forEach(function (root) {
+      var cues = all('.rm__cue', root), vs = all('.rm__voice[data-i]', root), v0 = root.querySelector('.rm__voice--0');
+      root.classList.add('is-live');
+      cues.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var i = b.getAttribute('data-i');
+          cues.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          vs.forEach(function (p) { p.hidden = p.getAttribute('data-i') !== i; });
+          if (v0) v0.hidden = true;
+          root.setAttribute('data-on', i);
+        });
+      });
+    });
+  }
+
   function initJoin() {
     all('[data-hero="joinin"]').forEach(function (root) {
       var tabs = all('.jn__tab', root), sw = root.querySelector('.jn__reset');
@@ -694,6 +718,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
