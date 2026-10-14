@@ -257,9 +257,14 @@
   /* 前の記事の成果物を見せる（v3 の recall）。もう一度入力させない。保存が無いときは、前の記事への案内だけ。 */
   function initRecall() {
     all('[data-recall]').forEach(function (root) {
-      var key = root.getAttribute('data-recall'), fb = root.getAttribute('data-fallback');
+      var key = root.getAttribute('data-recall'), fb = root.getAttribute('data-fallback'), mt = root.getAttribute('data-match');
       Promise.all([CTStore.get('bridge/' + key), fb ? CTStore.get('bridge/' + fb) : Promise.resolve(null)]).then(function (r) {
         var vals = (r[0] && r[0].values) || {}, st = r[1] || {}, n = 0;
+        if (mt) {  /* 条件つき: 前の記事の結果が、この記事に関係するときだけ出す */
+          var mp = mt.split(':');
+          if (String(vals[mp[0]] || '').indexOf(mp[1]) < 0) { root.hidden = true; return; }
+          root.hidden = false;
+        }
         all('[data-r]', root).forEach(function (dd) {
           var k = dd.getAttribute('data-r'), v = vals[k] || st[dd.getAttribute('data-alt') || k] || '';
           dd.textContent = v; dd.parentNode.hidden = !v; if (v) n++;
@@ -657,6 +662,30 @@
     });
   }
 
+  function initDiagnose() {
+    all('[data-diagnose]').forEach(function (root) {
+      var save = root.getAttribute('data-diagnose'), opts = all('.dg__opt', root), anss = all('.dg__ans', root);
+      var follows = all('.dg__follow', root), ress = all('.dg__res', root);
+      var show = function (o, a, store) {
+        opts.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-o') === o ? 'true' : 'false'); });
+        anss.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-o') === o && b.getAttribute('data-a') === a ? 'true' : 'false'); });
+        follows.forEach(function (f) { f.hidden = f.getAttribute('data-o') !== o; });
+        var rid = a !== null && a !== undefined ? o + '-' + a : o, hit = null;
+        ress.forEach(function (r) { var on = o !== null && r.getAttribute('data-res') === rid; r.hidden = !on; if (on) hit = r; });
+        if (store && save && hit) {
+          CTStore.set('bridge/' + save, { values: { issue: hit.getAttribute('data-issue'), next: hit.getAttribute('data-change'), area: hit.getAttribute('data-area') }, pick: [o, a], updatedAt: new Date().toISOString() })
+            .then(function () { fillFrom(); });
+        }
+      };
+      opts.forEach(function (b) { b.addEventListener('click', function () { var o = b.getAttribute('data-o'); var hasF = follows.some(function (f) { return f.getAttribute('data-o') === o; }); show(o, null, !hasF); }); });
+      anss.forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-o'), b.getAttribute('data-a'), true); }); });
+      var rs = root.querySelector('.dg__reset');
+      if (rs) rs.addEventListener('click', function () { show(null, null, false); if (save) CTStore.remove('bridge/' + save); if (opts[0]) opts[0].focus(); });
+      root.classList.add('is-live');
+      if (save) CTStore.get('bridge/' + save).then(function (rec) { if (rec && rec.pick) show(rec.pick[0], rec.pick[1], false); });
+    });
+  }
+
   function initRoom() {
     all('[data-hero="room"]').forEach(function (root) {
       var cues = all('.rm__cue', root), vs = all('.rm__voice[data-i]', root), v0 = root.querySelector('.rm__voice--0');
@@ -718,6 +747,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);

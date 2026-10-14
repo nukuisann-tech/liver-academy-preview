@@ -2613,3 +2613,39 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .dl24__ticks li { white-space: nowrap; }
 .zn__room { margin-top: 14px; }
 .zn__shield { top: -16px; right: 18px; }
+
+/* ================================================================ 27 batch 08（strip の HERO・診断）。動かない／押した後だけ */
+.st { display: grid; gap: 12px; }
+.st__row { padding: 14px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12); }
+.st__row--b { background: rgba(255, 226, 122, 0.08); }
+.st__h { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; color: var(--c-on-dark-2); }
+.st__items { margin-top: 8px; display: grid; gap: 6px; }
+.st__it { position: relative; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.07); }
+.st__lab { font-size: 0.9375rem; font-weight: 800; line-height: 1.5; color: #fff; }
+.st__sub { font-size: 0.75rem; line-height: 1.6; color: var(--c-on-dark-2); }
+.st__it.is-on { background: rgba(124, 196, 127, 0.18); }
+.st__it.is-block { background: transparent; box-shadow: inset 0 0 0 2px var(--c-marker); }
+.st__it.is-block .st__lab { color: var(--c-marker); }
+.st__copy { display: grid; gap: 4px; }
+.st__line { font-size: 1rem; font-weight: 800; line-height: 1.6; color: #fff; }
+.st__line + .st__line { font-size: 0.9375rem; color: var(--c-marker); }
+@media (min-width: 760px) { .st__items { grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); } }
+
+.dg { padding: 18px 14px 14px; border-radius: 22px; background: var(--c-surface); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+.dg__q { font-size: 1rem; font-weight: 800; line-height: 1.6; }
+.dg__opts, .dg__answers { margin-top: 10px; display: grid; gap: 6px; }
+.dg__opt, .dg__ans { width: 100%; min-height: 48px; display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 0; border-radius: 14px; background: var(--c-surface-2); color: var(--c-ink); font: inherit; font-size: 0.9375rem; font-weight: 700; line-height: 1.5; text-align: left; cursor: pointer; transition: background 200ms, color 200ms; }
+.dg__opt b { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--c-surface); font-family: var(--font-num); background-clip: padding-box; }
+.dg__opt[aria-pressed="true"], .dg__ans[aria-pressed="true"] { background: var(--c-ink); color: var(--c-on-dark); }
+.dg__opt[aria-pressed="true"] b { background: var(--c-marker); color: var(--c-ink); }
+.dg__follow { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--c-line-strong); }
+.dg__res { margin-top: 16px; padding: 16px 14px; border-radius: 18px; background: var(--c-ink); color: var(--c-on-dark); }
+.dg__kick { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; color: var(--c-marker); }
+.dg__rows > div { padding: 8px 0; border-top: 1px dashed rgba(255, 255, 255, 0.18); }
+.dg__rows > div:first-child { border-top: 0; }
+.dg__rows dt { font-size: 0.6875rem; font-weight: 800; color: var(--c-on-dark-2); }
+.dg__rows dd { margin-top: 2px; font-size: 0.9375rem; font-weight: 700; line-height: 1.7; }
+.dg__go { margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); font-weight: 800; color: var(--c-marker); text-decoration: underline; text-underline-offset: 4px; }
+.dg__foot { margin-top: 8px; }
+.dg:not(.is-live) .dg__follow, .dg:not(.is-live) .dg__res { display: none; }
+.dg__reset { min-height: var(--tap); }
