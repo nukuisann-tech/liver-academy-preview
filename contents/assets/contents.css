@@ -2579,3 +2579,37 @@ html:not(.js) .rm__voice[hidden] { display: block; }
   .gp__group--primary .gp__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .gp__group--secondary .gp__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
+
+/* ================================================================ 26 batch 07（CT-017 静かな管理室・CT-018 1 日の帯）。どちらも動かない */
+.zn { display: grid; gap: 14px; }
+.zn__room { position: relative; padding: 16px 14px; border-radius: 22px; background: #111a1f; box-shadow: inset 0 0 0 1.5px #3d5a66; }
+.zn__shield { position: absolute; right: 14px; top: 12px; width: 30px; height: 36px; background: #5fb3a1; clip-path: path("M15 0 L30 6 V16 C30 27 23 33 15 36 C7 33 0 27 0 16 V6 Z"); opacity: 0.9; }
+.zn__zones { display: grid; gap: 10px; }
+.zn__zone { padding: 12px 14px; border-radius: 16px; background: rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 0 1px rgba(217, 242, 234, 0.14); }
+.zn__h { font-size: 0.9375rem; font-weight: 800; color: #d9f2ea; }
+.zn__zone--3 .zn__h { color: var(--c-marker); }
+.zn__items { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+.zn__items li { padding: 3px 10px; border-radius: var(--r-pill); background: rgba(255, 255, 255, 0.08); font-size: 0.8125rem; line-height: 1.6; color: #dfe9ec; }
+.zn__words { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px; font-size: 1rem; font-weight: 800; color: #fff; }
+.dl24 { display: grid; gap: 12px; }
+.dl24__bar { position: relative; padding: 18px 4px 26px; border-radius: 18px; background: #1e1b33; }
+.dl24__ranges { position: relative; height: 34px; border-radius: 10px; background: rgba(255, 255, 255, 0.07); }
+.dl24__r { position: absolute; top: 0; bottom: 0; left: calc(var(--a) / 24 * 100%); width: calc((var(--b) - var(--a)) / 24 * 100%); border-radius: 8px; display: grid; place-items: center; overflow: hidden; }
+.dl24__r span { font-size: 0.625rem; font-weight: 800; white-space: nowrap; }
+.dl24__r--peak { background: var(--c-marker); color: var(--c-ink); }
+.dl24__r--open { background: transparent; box-shadow: inset 0 0 0 2px #b9f0c4; color: #b9f0c4; }
+.dl24__ticks { position: absolute; left: 4px; right: 4px; bottom: 6px; height: 14px; }
+.dl24__ticks li { position: absolute; left: calc(var(--a) / 24 * 100%); transform: translateX(-50%); font-family: var(--font-num); font-size: 0.6875rem; color: var(--c-on-dark-2); }
+.dl24__legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.75rem; font-weight: 700; color: var(--c-on-dark-2); }
+.dl24__lg::before { content: ""; display: inline-block; width: 14px; height: 10px; margin-right: 6px; border-radius: 3px; vertical-align: -1px; }
+.dl24__lg--peak::before { background: var(--c-marker); } .dl24__lg--open::before { box-shadow: inset 0 0 0 2px #b9f0c4; }
+.dl24__copy { display: grid; gap: 6px; }
+.dl24__line { font-size: 1rem; font-weight: 800; line-height: 1.6; color: #fff; }
+.dl24__line + .dl24__line { font-size: 0.9375rem; color: var(--c-marker); }
+.dl24__src { font-size: 0.6875rem; line-height: 1.6; color: var(--c-on-dark-2); }
+@media (min-width: 760px) { .zn__zones { grid-template-columns: repeat(3, minmax(0, 1fr)); } .dl24__r span { font-size: 0.75rem; } }
+@media (max-width: 380px) { .tl { padding-inline: 8px; } .tl__row { grid-template-columns: 3.6em repeat(var(--cols), minmax(44px, 1fr)); gap: 4px; } }
+.dl24__ticks li:first-child { transform: none; } .dl24__ticks li:last-child { transform: translateX(-100%); }
+.dl24__ticks li { white-space: nowrap; }
+.zn__room { margin-top: 14px; }
+.zn__shield { top: -16px; right: 18px; }
