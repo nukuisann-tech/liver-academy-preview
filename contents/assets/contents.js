@@ -475,6 +475,40 @@
     });
   }
 
+  /* batch 04: launch（番号で進む 3 段。data-step）と promise（あいまい ⇄ はっきり。data-show。はっきりのとき流れが順に点く） */
+  function initLaunch() {
+    all('[data-hero="launch"]').forEach(function (root) {
+      var tabs = all('.hl__tab', root), next = root.querySelector('.hl__next'), lab = root.querySelector('.hl__nextlab');
+      var go = function (n) {
+        root.setAttribute('data-step', String(n));
+        tabs.forEach(function (t) { t.setAttribute('aria-pressed', t.getAttribute('data-s') === String(n) ? 'true' : 'false'); });
+        tabs.forEach(function (t) { t.classList.toggle('is-done', Number(t.getAttribute('data-s')) < n); });
+        if (lab) lab.textContent = n >= tabs.length ? '最初から見る' : '次のステップへ';
+      };
+      root.classList.add('is-live');
+      tabs.forEach(function (t) { t.addEventListener('click', function () { go(Number(t.getAttribute('data-s'))); }); });
+      if (next) next.addEventListener('click', function () { var n = Number(root.getAttribute('data-step')) || 1; go(n >= tabs.length ? 1 : n + 1); });
+      go(1);
+    });
+  }
+
+  function initPromise() {
+    all('[data-hero="promise"]').forEach(function (root) {
+      var tabs = all('.hp__tab', root), touched = false;
+      var show = function (w) {
+        root.setAttribute('data-show', w);
+        tabs.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-show') === w ? 'true' : 'false'); });
+        root.classList.remove('is-in');
+        global.requestAnimationFrame(function () { global.requestAnimationFrame(function () { root.classList.add('is-in'); }); });
+      };
+      root.classList.add('is-live');
+      tabs.forEach(function (b) { b.addEventListener('click', function () { touched = true; show(b.getAttribute('data-show')); }); });
+      if (reduce) { show('clear'); return; }
+      show('vague');
+      onView(root, function () { setTimeout(function () { if (!touched) show('clear'); }, 1100); }, 0.6);
+    });
+  }
+
   var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
@@ -488,6 +522,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
