@@ -2129,3 +2129,29 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
 }
 
 .tool--workshop .linkbtn { min-height: var(--tap); }
+
+
+/* =====================================================================================================
+   21 Hero Family（70% System / 30% Surprise。正本 docs/content-standards.md）
+   body[data-family] のときだけ、濃い面（FIRST VIEW とその続き）の地を、系統ごとの色・模様にする。真っ黒で固定しない。虹色にもしない。
+   ===================================================================================================== */
+[data-family] .fv, [data-family] .fvx { background-color: var(--fam-bg); background-image: var(--fam-tex); background-size: var(--fam-size, auto); background-attachment: scroll; }
+[data-family="foundation"] { --fam-bg: #181c20; --fam-tex: radial-gradient(rgba(255, 255, 255, 0.07) 1.3px, transparent 1.5px); --fam-size: 28px 28px; }
+[data-family="data"] { --fam-bg: #131a26; --fam-tex: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px); --fam-size: 34px 34px; }
+[data-family="studio"] { --fam-bg: #1d1b19; --fam-tex: radial-gradient(60% 50% at 70% 20%, rgba(255, 243, 196, 0.1), transparent 70%); }
+[data-family="community"] { --fam-bg: #171a2b; --fam-tex: radial-gradient(40% 36% at 82% 18%, rgba(143, 211, 255, 0.09), transparent 70%), radial-gradient(34% 30% at 12% 78%, rgba(255, 179, 199, 0.07), transparent 70%); }
+[data-family="brand"] { --fam-bg: #1c1724; --fam-tex: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 22px); }
+[data-family] .top { background: var(--fam-bg); }
+
+/* versus の進み具合（DATA の Hero） */
+.hv__meter { position: relative; width: 100%; padding: 12px 14px 13px; border-radius: 14px; background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px var(--c-dark-line); }
+.hv__mlabel { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 0.8125rem; font-weight: 800; color: var(--c-on-dark-2); line-height: 1.3; }
+.hv__mlabel b { background: none; font-family: var(--font-num); font-size: 1.5rem; color: var(--c-marker); letter-spacing: -0.01em; }
+.hv__mlabel b i { font-style: normal; font-size: 0.9375rem; color: var(--c-on-dark-2); }
+.hv__mbar { display: block; margin-top: 8px; height: 10px; border-radius: 5px; background: rgba(255, 255, 255, 0.12); overflow: hidden; }
+.hv__mbar i { display: block; width: var(--v); height: 100%; border-radius: 5px; background: var(--c-marker); }
+.hv.is-live .hv__mbar i { width: 0; }
+.hv.is-live.is-in .hv__mbar i { width: var(--v); transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i, 0) * 260ms + 200ms); }
+.hv__loop > .hv__meter::before { content: none; }
+
+.sw__tab { min-width: var(--tap); }
