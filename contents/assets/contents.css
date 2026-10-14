@@ -2561,3 +2561,21 @@ html:not(.js) .rm__voice[hidden] { display: block; }
   .mo__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) { .rm.is-live .rm__voice:not([hidden]) { animation: none; } }
+
+/* まとまりで主と従を分ける（groups。CT-015 自己紹介）。札は付けず、余白・線・面・見出しで分ける */
+.sec > .gp { max-width: none; }
+.gp { display: grid; gap: 22px; }
+.gp__h { font-weight: 800; line-height: 1.5; }
+.gp__cards { margin-top: 10px; display: grid; gap: 8px; }
+.gp__group--primary .gp__h { font-size: 1.125rem; }
+.gp__group--primary .gp__card { padding: 16px 18px; border-radius: 16px; background: var(--c-surface); box-shadow: inset 0 0 0 2px var(--c-ink); }
+.gp__group--primary .gp__ct { font-size: 1.125rem; font-weight: 800; line-height: 1.5; }
+.gp__group--secondary { padding-top: 18px; border-top: 1px dashed var(--c-line-strong); }
+.gp__group--secondary .gp__h { font-size: 0.9375rem; color: var(--c-ink-2); }
+.gp__group--secondary .gp__card { padding: 12px 16px; border-radius: 14px; background: var(--c-surface-2); box-shadow: inset 0 0 0 1px var(--c-line-strong); }
+.gp__group--secondary .gp__ct { font-size: 0.9375rem; font-weight: 700; line-height: 1.5; color: var(--c-ink-2); }
+.gp__cx { margin-top: 4px; font-size: 0.875rem; line-height: 1.7; color: var(--c-ink-2); }
+@media (min-width: 760px) {
+  .gp__group--primary .gp__cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gp__group--secondary .gp__cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
