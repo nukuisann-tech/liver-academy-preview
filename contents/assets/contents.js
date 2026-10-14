@@ -191,6 +191,17 @@
       p.textContent = missing ? (p.getAttribute('data-empty') || '') : text;
       p.classList.toggle('is-empty', missing);
     });
+    all('.wk__mx', box).forEach(function (mx) {  /* 2×2: 縦（y）と横（x）の選択で、1 つのマスを点ける */
+      var pick = function (k) { var c = all('input[data-choice="' + k + '"]', box).filter(function (x) { return x.checked; })[0]; return c ? c.getAttribute('data-idx') : null; };
+      var y = pick(mx.getAttribute('data-mx-y')), x = pick(mx.getAttribute('data-mx-x'));
+      all('.wk__cell', mx).forEach(function (cell) { cell.classList.toggle('is-on', y !== null && x !== null && cell.getAttribute('data-cell') === y + x); });
+      mx.classList.toggle('is-picked', y !== null && x !== null);
+    });
+    if (box.hasAttribute('data-bridge')) {  /* ほかの記事で使う結果（例: 視聴者の欲しいもの → CT-014） */
+      var bk = box.getAttribute('data-bridge-field');
+      var labels = all('input[data-choice="' + bk + '"]', box).filter(function (c) { return c.checked; }).map(function (c) { return c.getAttribute('data-label'); });
+      CTStore.set('bridge/' + box.getAttribute('data-bridge'), { labels: labels, updatedAt: new Date().toISOString() });
+    }
     var card = box.querySelector('.wk__card');
     if (card) card.classList.toggle('is-on', filled > 0);
   }
@@ -518,6 +529,95 @@
     });
   }
 
+  /* batch 05: panel（確認パネル）・compass（診断。結果を bridge/style に保存）・joinin（途中参加）・bridge（ほかの記事の結果を読む） */
+  var PF_ST = ['未確認', '確認中', 'OK'];
+  function initPanel() {
+    all('[data-hero="panel"]').forEach(function (root) {
+      var items = all('.pf__item', root), cnt = root.querySelector('.pf__count b'), must = Number(root.getAttribute('data-must')) || 0;
+      var sync = function () {
+        var ok = items.filter(function (b) { return b.classList.contains('pf__item--must') && b.getAttribute('data-state') === '2'; }).length;
+        if (cnt) cnt.textContent = String(ok);
+        root.classList.toggle('is-ready', ok === must && must > 0);
+      };
+      root.classList.add('is-live');
+      items.forEach(function (b) {
+        b.addEventListener('click', function () {
+          var n = (Number(b.getAttribute('data-state')) + 1) % 3;
+          b.setAttribute('data-state', String(n));
+          b.querySelector('.pf__st').textContent = PF_ST[n];
+          b.setAttribute('aria-label', b.querySelector('.pf__lab').firstChild.textContent + '：' + PF_ST[n]);
+          sync();
+        });
+      });
+      sync();
+    });
+  }
+
+  function initCompass() {
+    all('[data-hero="compass"]').forEach(function (root) {
+      var styles = {}; try { styles = JSON.parse(root.getAttribute('data-styles')) || {}; } catch (e) { styles = {}; }
+      var opts = all('.cp__opt', root), card = root.querySelector('.cp__card'), wait = root.querySelector('.cp__wait');
+      var nq = all('.cp__q', root).length, ans = {};
+      var order = ['A', 'B', 'C', 'D'];
+      var show = function (save) {
+        opts.forEach(function (o) { o.setAttribute('aria-pressed', ans[o.getAttribute('data-q')] === o.getAttribute('data-v') ? 'true' : 'false'); });
+        if (Object.keys(ans).length < nq) { card.hidden = true; wait.hidden = false; return; }
+        var c = {}; order.forEach(function (k) { c[k] = 0; });
+        Object.keys(ans).forEach(function (q) { c[ans[q]]++; });
+        var max = Math.max.apply(null, order.map(function (k) { return c[k]; }));
+        var tops = order.filter(function (k) { return c[k] === max; });
+        var primary = tops.indexOf(ans['0']) >= 0 ? ans['0'] : tops[0];  /* 同じ数なら、Q1（疲れにくい）の答えを主軸に */
+        var rest = order.filter(function (k) { return k !== primary && c[k] > 0; }).sort(function (a, b) { return c[b] - c[a]; });
+        var secondary = rest[0] || '';
+        var P = styles[primary] || {}, S = styles[secondary] || {};
+        var put = function (k, v) { var el = card.querySelector('[data-r="' + k + '"]'); if (el) el.textContent = v; };
+        put('primary', primary + '　' + (P.name || ''));
+        put('secondary', secondary ? secondary + '　' + (S.name || '') : 'なし（主軸で試してみる）');
+        put('experience', (P.experience || '') + (secondary && S.experience ? '　＋　' + S.experience : ''));
+        put('try', P.try || '');
+        card.hidden = false; wait.hidden = true;
+        if (save) CTStore.set('bridge/style', { primary: primary, secondary: secondary, answers: ans, updatedAt: new Date().toISOString() });
+      };
+      opts.forEach(function (o) { o.addEventListener('click', function () { ans[o.getAttribute('data-q')] = o.getAttribute('data-v'); show(true); }); });
+      var reset = root.querySelector('.cp__reset');
+      if (reset) reset.addEventListener('click', function () { ans = {}; CTStore.remove('bridge/style'); show(false); if (opts[0]) opts[0].focus(); });
+      root.classList.add('is-live');
+      CTStore.get('bridge/style').then(function (rec) { if (rec && rec.answers) ans = rec.answers; show(false); });
+    });
+  }
+
+  function initJoin() {
+    all('[data-hero="joinin"]').forEach(function (root) {
+      var tabs = all('.jn__tab', root), sw = root.querySelector('.jn__reset');
+      root.classList.add('is-live');
+      tabs.forEach(function (t) { t.addEventListener('click', function () { root.setAttribute('data-p', t.getAttribute('data-p')); tabs.forEach(function (x) { x.setAttribute('aria-pressed', x === t ? 'true' : 'false'); }); }); });
+      if (sw) sw.addEventListener('change', function () { root.setAttribute('data-m', sw.checked ? 'on' : 'off'); });
+    });
+  }
+
+  function initBridge() {
+    all('[data-bridge-read]').forEach(function (root) {
+      var labels = {}; try { labels = JSON.parse(root.getAttribute('data-labels')) || {}; } catch (e) { labels = {}; }
+      var state = root.querySelector('.br__state'), list = all('.br__c', root);
+      Promise.all([CTStore.get('bridge/style'), CTStore.get('bridge/need')]).then(function (r) {
+        var st = r[0], nd = r[1];
+        if (!st || !st.primary) { if (state) state.textContent = state.getAttribute('data-empty'); return; }
+        var needs = (nd && nd.labels) || [];
+        var score = function (li) {
+          var s = 0, ls = li.getAttribute('data-style'), ln = (li.getAttribute('data-needs') || '').split('|');
+          if (ls === st.primary) s += 4; else if (ls === st.secondary) s += 2;
+          needs.forEach(function (n) { if (ln.indexOf(n) >= 0) s += 1; });
+          return s;
+        };
+        var ranked = list.slice().sort(function (a, b) { return score(b) - score(a); });
+        list.forEach(function (li) { li.hidden = true; li.classList.remove('is-pick'); });
+        ranked.slice(0, 3).forEach(function (li) { li.hidden = false; li.classList.add('is-pick'); li.parentNode.appendChild(li); });
+        if (state) state.textContent = 'あなたの診断（主軸 ' + st.primary + (labels[st.primary] ? '：' + labels[st.primary] : '') + (st.secondary ? '／サブ ' + st.secondary : '') + (needs.length ? '／視聴者の欲しいもの：' + needs.join('・') : '') + '）から選んだ3つです。';
+        root.classList.add('is-bridged');
+      });
+    });
+  }
+
   var REVEAL = '.kb__book, .oc__say, .ov, .sec__head, .sec > .b, .pro__head, .cn__h, .cn__item, .loop, .sum__h, .goal, .nx__next';
   function initReveal() {
     if (reduce || !hasIO || !doc.querySelector('.page-article')) return;
@@ -531,6 +631,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initJoin(); initBridge(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
