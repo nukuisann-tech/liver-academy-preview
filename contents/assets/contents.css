@@ -2698,3 +2698,17 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .wd__row--pro { background: var(--c-ink); color: var(--c-on-dark); }
 .wd__row--pro dt { color: var(--c-marker); }
 @media (min-width: 980px) { .wd__rows { grid-template-columns: 0.8fr 1fr 1.2fr; } }
+
+/* ENTRY ARC（D-072）: HERO → 読者の悩み → 学べること → 学んだ先 → 成果物の予告 → 本編 */
+.intro > .en2:first-child { margin-top: 40px; }
+.en2 + .kb { margin-top: 40px; }
+.fvx--solo { margin-top: 64px; padding-top: 56px; }
+.en2__reframe { margin-top: 18px; padding: 14px 16px; border-radius: 16px; background: var(--c-ink); color: var(--c-on-dark); font-size: 1rem; font-weight: 700; line-height: 1.85; }
+.en2__reframe strong { background: none; color: var(--c-marker); }
+.op { margin-top: 40px; display: flex; gap: 10px; align-items: center; padding: 14px 18px; border-radius: 16px; background: var(--c-marker-soft); box-shadow: inset 0 0 0 1.5px var(--c-marker); font-size: 0.9375rem; font-weight: 800; line-height: 1.7; }
+.op .ico { flex: none; color: var(--c-ink); }
+@media (min-width: 760px) { .fvx--solo { padding-top: 72px; } }
+.dg__read { margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255, 255, 255, 0.2); }
+.dg__rl { font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.06em; color: var(--c-marker); }
+.dg__read ul { margin-top: 4px; display: grid; gap: 2px; }
+.dg__ra { display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); font-size: 0.9375rem; font-weight: 800; color: #fff; text-decoration: underline; text-underline-offset: 4px; }
