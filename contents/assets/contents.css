@@ -2728,3 +2728,16 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .kc__so .kc__solabel { display: inline-block; margin-right: 8px; vertical-align: 1px; }
 .kc__so { grid-column: 1 / -1; margin-top: 0; }
 @media (min-width: 760px) { .kc { grid-template-rows: auto 1fr auto auto; } .kc__so { grid-column: 1; } }
+
+/* MASTER CONTENT LAW: OBSERVE / ADJUST・未来の見出し */
+.obs { margin-top: 28px; padding: 22px 18px 18px; border-radius: 22px; background: var(--c-surface); box-shadow: 0 0 0 1.5px var(--c-line-strong); }
+.obs__h { font-size: 1.25rem; }
+.obs__lead { margin-top: 6px; font-size: 0.9375rem; line-height: 1.8; color: var(--c-ink-2); }
+.obs__qs { margin-top: 10px; }
+.obs__adj { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--c-line-strong); }
+.obs__al { font-size: 0.875rem; font-weight: 800; }
+.obs__opts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.en2__fh { margin-top: 18px; font-size: 1.0625rem; font-weight: 800; line-height: 1.6; }
+.obs, .obs .chk__text, .obs__h, .obs__al { color: var(--c-ink); }
+.obs .rf__opt { color: var(--c-ink); }
+.obs .rf__opt:has(input:checked) { color: var(--c-on-dark); }
