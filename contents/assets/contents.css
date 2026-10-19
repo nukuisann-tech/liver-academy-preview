@@ -2047,7 +2047,7 @@ summary.pro__sum:hover { background: var(--c-surface-2); }
 .wk__crow { padding: 10px 0; border-top: 1px solid var(--c-dark-line); }
 .wk__crow:first-child { border-top: 0; }
 .wk__crow dt { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; color: var(--c-on-dark-2); }
-.wk__crow dd { margin-top: 2px; font-size: 1.0625rem; font-weight: 800; line-height: 1.6; overflow-wrap: anywhere; }
+.wk__crow dd { margin-top: 2px; font-size: 1.0625rem; font-weight: 800; line-height: 1.6; overflow-wrap: anywhere; white-space: pre-line; }
 .wk__card .is-empty { color: #7d8791; font-weight: var(--fw-medium); font-size: 0.875rem; }
 .wk__chips { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
 .wk__chips li { padding: 5px 11px 4px; border-radius: var(--r-pill); background: var(--c-marker); color: var(--c-ink); font-size: 0.8125rem; font-weight: 800; line-height: 1.4; }
