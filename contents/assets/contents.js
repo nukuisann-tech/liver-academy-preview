@@ -93,6 +93,7 @@
         updateBuilder(box);
         updateWorkshop(box);
         updateReflect(box);
+        updateTimeWeek(box);
         fields.forEach(autoGrow);
       }
       function save() {
@@ -223,6 +224,21 @@
   }
 
   /* ふり返り（v3）: はい／いいえを選ぶと、その答えへの一言だけを出す */
+  function updateTimeWeek(box) {
+    if (!box.classList.contains('tw')) return;
+    var goal = parseFloat(box.getAttribute('data-goal')) || 0, sum = 0, days = 0;
+    all('.tw__in', box).forEach(function (el) {
+      var v = parseFloat(el.value);
+      if (!isNaN(v) && v > 0) { sum += Math.min(v, 24); days++; }
+    });
+    var fmt = function (n) { return (Math.round(n * 10) / 10) + ' 時間'; };
+    var put = function (k, t) { var el = box.querySelector('[data-tw="' + k + '"]'); if (el) el.textContent = t; };
+    put('sum', fmt(sum));
+    put('gap', sum > goal ? '目安を超えています。疲れと反応も記録しましょう' : (sum === goal ? '目安に届いています' : 'あと ' + fmt(goal - sum)));
+    put('avg', days ? fmt(sum / days) + '（' + days + '日）' : '—');
+    put('rest', (all('.tw__in', box).length - days) + '日');
+  }
+
   function updateReflect(box) {
     if (!box.classList.contains('rf')) return;
     var on = all('input[type="radio"]', box).filter(function (r) { return r.checked; })[0];

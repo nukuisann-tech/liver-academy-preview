@@ -2745,3 +2745,19 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 /* 原本タイトルの小さなメモ（OZ BATCH 12 修正指示 §1。装飾なし・折り返して欠けない） */
 .fv__src { list-style: none; margin: 10px 0 0; padding: 0; font-size: 0.75rem; line-height: 1.6; color: var(--c-on-dark-2); opacity: 0.85; overflow-wrap: anywhere; }
 .fv__src li + li { margin-top: 2px; }
+
+/* time_week（1 週間の配信時間・BATCH 21） */
+.tw { padding: 18px; border: 1px solid var(--c-line); border-radius: 16px; background: var(--c-surface); }
+.tw__title { font-weight: 800; margin-bottom: 10px; }
+.tw__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.tw__row { display: flex; align-items: center; gap: 6px; min-height: 44px; }
+.tw__day { font-weight: 800; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; }
+.tw__in { width: 4.5em; min-height: 44px; font-size: 1rem; padding: 6px 8px; border: 1px solid var(--c-line-strong); border-radius: 10px; }
+.tw__unit { font-size: 0.875rem; white-space: nowrap; }
+.tw__out { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 14px; }
+.tw__out > div { padding: 10px 12px; border-radius: 12px; background: var(--c-surface-2); }
+.tw__out dt { font-size: 0.75rem; font-weight: 800; }
+.tw__out dd { margin-top: 2px; font-size: 1.125rem; font-weight: 800; }
+.tw__memo { margin-top: 12px; display: grid; gap: 6px; }
+.tw__mlabel { font-weight: 800; min-height: 44px; display: flex; align-items: center; }
+.tw__memo input { min-height: 44px; padding: 8px 10px; border: 1px solid var(--c-line-strong); border-radius: 10px; font-size: 1rem; }
