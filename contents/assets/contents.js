@@ -295,6 +295,32 @@
   }
 
   /* 切り替えて見くらべる（batch 02 の switch）: .is-live のとき、選んだ 1 枚だけを出す。 */
+  function initIdeaBank() {
+    all('[data-ib]').forEach(function (box) {
+      var sel = {};
+      function apply() {
+        var n = 0;
+        all('.ib__card', box).forEach(function (c) {
+          var ok = Object.keys(sel).every(function (k) {
+            if (!sel[k]) return true;
+            return (c.getAttribute('data-' + k) || '').split('|').indexOf(sel[k]) >= 0;
+          });
+          c.hidden = !ok; if (ok) n++;
+        });
+        var cnt = box.querySelector('[data-ib-count]'); if (cnt) cnt.textContent = String(n);
+      }
+      all('.ib__chip', box).forEach(function (btn) {
+        btn.setAttribute('aria-pressed', btn.classList.contains('is-on') ? 'true' : 'false');
+        btn.addEventListener('click', function () {
+          var k = btn.getAttribute('data-ib-key');
+          sel[k] = btn.getAttribute('data-ib-val');
+          all('.ib__chip[data-ib-key="' + k + '"]', box).forEach(function (b) { var on = b === btn; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+          apply();
+        });
+      });
+    });
+  }
+
   function initSwitch() {
     all('[data-switch]').forEach(function (root) {
       var tabs = all('.sw__tab', root), panes = all('.sw__pane', root);
@@ -763,6 +789,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);

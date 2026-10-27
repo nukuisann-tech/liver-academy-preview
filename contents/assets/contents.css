@@ -2761,3 +2761,20 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .tw__memo { margin-top: 12px; display: grid; gap: 6px; }
 .tw__mlabel { font-weight: 800; min-height: 44px; display: flex; align-items: center; }
 .tw__memo input { min-height: 44px; padding: 8px 10px; border: 1px solid var(--c-line-strong); border-radius: 10px; font-size: 1rem; }
+
+/* idea_bank（投稿ネタ辞典・BATCH 23） */
+.ib__title { font-weight: 800; margin-bottom: 10px; }
+.ib__filters { display: grid; gap: 10px; padding: 14px; border-radius: 14px; background: var(--c-surface-2); }
+.ib__glabel { font-size: 0.75rem; font-weight: 800; margin-bottom: 6px; }
+.ib__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ib__chip { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--c-line-strong); background: var(--c-surface); font: inherit; font-size: 0.875rem; cursor: pointer; }
+.ib__chip.is-on { background: var(--c-ink); color: var(--c-on-dark); border-color: var(--c-ink); }
+.ib__count { margin: 12px 0 8px; font-size: 0.875rem; font-weight: 800; }
+.ib__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; list-style: none; padding: 0; margin: 0; }
+.ib__card { padding: 14px; border: 1px solid var(--c-line); border-radius: 14px; background: var(--c-surface); }
+.ib__card[hidden] { display: none; }
+.ib__no { font-size: 0.75rem; font-weight: 800; color: var(--c-ink-3); display: flex; gap: 8px; }
+.ib__grp { letter-spacing: 0.06em; }
+.ib__t { font-weight: 800; margin: 4px 0 8px; }
+.ib__row { display: grid; grid-template-columns: 6.5em 1fr; gap: 6px; padding: 4px 0; border-top: 1px solid var(--c-line); font-size: 0.875rem; }
+.ib__row dt { font-weight: 800; color: var(--c-ink-3); font-size: 0.75rem; }
