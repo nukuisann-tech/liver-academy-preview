@@ -176,6 +176,7 @@
       var max = Number(row.getAttribute('data-max')) || 3, cbs = all('input[type="checkbox"]', row);
       var on = cbs.filter(function (c) { return c.checked; }).length;
       cbs.forEach(function (c) { c.disabled = !c.checked && on >= max; });
+      var mn = row.querySelector('[data-maxnote]'); if (mn) mn.hidden = on < max;
     });
     var filled = 0;
     all('[data-out]', box).forEach(function (dd) {
