@@ -181,6 +181,11 @@
     var filled = 0;
     all('[data-out]', box).forEach(function (dd) {
       var v = val(dd.getAttribute('data-out')) || (dd.getAttribute('data-alt') ? val(dd.getAttribute('data-alt')) : '');
+      var only = dd.getAttribute('data-only');
+      if (only !== null) {  /* その答えのときだけ行を出す（例: 居心地チェックの「改善したい」だけを並べる） */
+        dd.parentNode.hidden = v !== only;
+        if (v !== only) return;
+      }
       dd.textContent = v || dd.getAttribute('data-empty') || '';
       dd.classList.toggle('is-empty', !v);
       if (v) filled++;
@@ -217,8 +222,9 @@
     if (box.hasAttribute('data-bridge-fields')) {  /* 書いた欄の値を、そのまま次の記事へ（例: MY CREATOR ADVANTAGE → CT-014） */
       var vals = {}, anyv = false;
       box.getAttribute('data-bridge-fields').split('|').forEach(function (k) { vals[k] = val(k); if (vals[k]) anyv = true; });
-      if (anyv) CTStore.set('bridge/' + box.getAttribute('data-bridge'), { values: vals, updatedAt: new Date().toISOString() });
-      else CTStore.remove('bridge/' + box.getAttribute('data-bridge'));
+      var bp = anyv ? CTStore.set('bridge/' + box.getAttribute('data-bridge'), { values: vals, updatedAt: new Date().toISOString() })
+                    : CTStore.remove('bridge/' + box.getAttribute('data-bridge'));
+      if (bp && bp.then) bp.then(initSuggest);
     }
     var card = box.querySelector('.wk__card');
     if (card) card.classList.toggle('is-on', filled > 0);
@@ -267,6 +273,32 @@
           el.value = v; el.setAttribute('data-auto', v);
           el.dispatchEvent(new Event('input', { bubbles: true }));
         }
+      });
+    });
+  }
+
+  /* 候補から入れる（data-sug="<bridge の key>:<欄>"）: 保存がある候補だけボタンを出し、押したときだけ欄へ入れる。 */
+  function initSuggest() {
+    all('[data-sug-for]').forEach(function (wrap) {
+      var input = doc.getElementById(wrap.getAttribute('data-sug-for'));
+      var btns = all('[data-sug]', wrap);
+      Promise.all(btns.map(function (bt) { return CTStore.get('bridge/' + bt.getAttribute('data-sug').split(':')[0]); })).then(function (rs) {
+        var n = 0;
+        btns.forEach(function (bt, i) {
+          var f = bt.getAttribute('data-sug').split(':')[1], r = rs[i];
+          var v = r && r.values && r.values[f] ? r.values[f] : '';
+          bt.hidden = !v; bt.setAttribute('data-v', v);
+          bt.textContent = (bt.getAttribute('data-sug-label') ? bt.getAttribute('data-sug-label') + '：' : '') + v;
+          if (v) n++;
+          if (!bt.hasAttribute('data-bound')) {
+            bt.setAttribute('data-bound', '');
+            bt.addEventListener('click', function () {
+              if (!input) return;
+              input.value = bt.getAttribute('data-v'); input.dispatchEvent(new Event('input', { bubbles: true })); input.focus();
+            });
+          }
+        });
+        wrap.hidden = !n;
       });
     });
   }
@@ -790,6 +822,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
