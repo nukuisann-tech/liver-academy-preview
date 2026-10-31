@@ -303,6 +303,96 @@
     });
   }
 
+  /* 4 段階・33 ステップ成長ロードマップ（CT-042）: チェックは id（pre-01 など）で保存（このブラウザの中だけ）。
+     数・バー・図の ✓・段階カードの状態・今日の一歩・まだのステップを、保存から毎回まとめて描き直す。 */
+  function initRoadmap() {
+    var boxes = all('input[data-rm-step]');
+    if (!boxes.length) return;
+    var KEY = 'roadmap/progress', ORDER = ['pre', 'basic', 'intermediate', 'advanced'];
+    var SEC = { pre: 'sec-s1', basic: 'sec-s2', intermediate: 'sec-s3', advanced: 'sec-s4' };
+    var steps = boxes.map(function (b) {
+      var id = b.getAttribute('data-rm-step'), card = doc.getElementById('step-' + id);
+      return { id: id, stage: id.split('-')[0], box: b, card: card, title: card ? card.querySelector('.rm-card__h').textContent : id, no: card ? card.querySelector('.rm-card__k').textContent.replace(/[^0-9]/g, '') : '' };
+    });
+    var state = { v: 1, steps: {}, stage: '' };
+    function save() { state.updatedAt = new Date().toISOString(); return CTStore.set(KEY, state); }
+    function draw() {
+      var cnt = { all: 0 }, tot = { all: steps.length };
+      ORDER.forEach(function (k) { cnt[k] = 0; tot[k] = 0; });
+      steps.forEach(function (s) {
+        var on = !!(state.steps[s.id] && state.steps[s.id].done);
+        s.box.checked = on; tot[s.stage]++;
+        if (on) { cnt[s.stage]++; cnt.all++; }
+        if (s.card) s.card.classList.toggle('is-done', on);
+        all('[data-rm-node="' + s.id + '"], [data-rm-chip="' + s.id + '"]').forEach(function (n) { n.classList.toggle('is-done', on); });
+      });
+      Object.keys(cnt).forEach(function (k) {
+        all('[data-rm-count="' + k + '"]').forEach(function (e) { e.textContent = cnt[k]; });
+        all('[data-rm-bar="' + k + '"]').forEach(function (e) { e.style.width = (tot[k] ? cnt[k] / tot[k] * 100 : 0) + '%'; });
+      });
+      ORDER.forEach(function (k) {
+        var st = cnt[k] === 0 ? '未着手' : (cnt[k] === tot[k] ? 'すべて実践済み' : '進行中');
+        all('[data-rm-state="' + k + '"]').forEach(function (e) { e.textContent = st; });
+        all('[data-rm-navc="' + k + '"]').forEach(function (e) { e.classList.toggle('is-doing', st === '進行中'); e.classList.toggle('is-done', st === 'すべて実践済み'); });
+        all('[data-rm-left="' + k + '"]').forEach(function (ul) {
+          ul.textContent = '';
+          steps.filter(function (s) { return s.stage === k && !(state.steps[s.id] && state.steps[s.id].done); }).forEach(function (s) {
+            var li = doc.createElement('li'), a = doc.createElement('a');
+            a.href = '#step-' + s.id; a.textContent = s.no + '｜' + s.title; li.appendChild(a); ul.appendChild(li);
+          });
+        });
+      });
+      all('.rm-seg[data-rm-seg]').forEach(function (seg) {
+        var k = seg.getAttribute('data-rm-seg'), sib = all('.rm-seg[data-rm-seg="' + k + '"]', seg.ownerSVGElement);
+        seg.classList.toggle('is-on', sib.indexOf(seg) < cnt[k]);
+      });
+      /* 今日の一歩: 選んだ段階（なければ最初にまだがある段階）の、まだのステップの最初の 1 つ */
+      var start = state.stage && ORDER.indexOf(state.stage) >= 0 ? ORDER.indexOf(state.stage) : 0, next = null;
+      for (var i = 0; i < ORDER.length && !next; i++) {
+        var k2 = ORDER[(start + i) % ORDER.length];
+        next = steps.filter(function (s) { return s.stage === k2 && !(state.steps[s.id] && state.steps[s.id].done); })[0] || null;
+      }
+      steps.forEach(function (s) {
+        var on = next && s.id === next.id;
+        if (s.card) s.card.classList.toggle('is-next', !!on);
+        all('[data-rm-node="' + s.id + '"]').forEach(function (n) { n.classList.toggle('is-next', !!on); });
+      });
+      all('[data-rm-today]').forEach(function (t) {
+        t.hidden = !next;
+        if (!next) return;
+        t.querySelector('[data-rm-today-t]').textContent = 'STEP ' + next.no + '｜' + next.title;
+        t.querySelector('[data-rm-today-a]').setAttribute('href', '#step-' + next.id);
+      });
+      all('[data-rm-alldone]').forEach(function (e) { e.hidden = cnt.all < tot.all; });
+      all('[data-rm-pick]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-rm-pick') === state.stage)); });
+    }
+    boxes.forEach(function (b) {
+      b.addEventListener('change', function () {
+        var id = b.getAttribute('data-rm-step');
+        if (b.checked) state.steps[id] = { done: true, at: new Date().toISOString() };
+        else delete state.steps[id];  /* 同じ id を二重に持たない */
+        save(); draw();
+      });
+    });
+    all('[data-rm-pick]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        state.stage = b.getAttribute('data-rm-pick'); save(); draw();
+        var sec = doc.getElementById(SEC[state.stage]);
+        all('.is-rm-focus').forEach(function (x) { x.classList.remove('is-rm-focus'); });
+        if (sec) {
+          sec.classList.add('is-rm-focus');
+          var reduce = global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          sec.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+          sec.setAttribute('tabindex', '-1'); sec.focus({ preventScroll: true });
+        }
+      });
+    });
+    CTStore.get(KEY).then(function (r) {
+      if (r && r.steps && typeof r.steps === 'object') { state.steps = r.steps; state.stage = r.stage || ''; }
+      draw();
+    });
+  }
+
   /* 前の記事の成果物を見せる（v3 の recall）。もう一度入力させない。保存が無いときは、前の記事への案内だけ。 */
   function initRecall() {
     all('[data-recall]').forEach(function (root) {
@@ -822,6 +912,6 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initLights(); initReveal(); }
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
