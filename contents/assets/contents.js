@@ -912,6 +912,22 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); }
+  /* ---------------------------------------------------------------- LIVE CREATOR JOURNEY（CT-047）: 配信時間シミュレーター（計算して表示するだけ。保存は initSaves） */
+  function initJourney() {
+    all('[data-jr-sim]').forEach(function (box) {
+      var d = box.querySelector('[data-field="days"]'), h = box.querySelector('[data-field="hours"]'), out = box.querySelector('[data-jr-sim-out]');
+      if (!d || !h || !out) return;
+      function label(v) { var m = Math.round(v * 60), hh = Math.floor(m / 60), mm = m % 60; return (hh ? hh + '時間' : '') + (mm ? mm + '分' : ''); }
+      function calc() {
+        var days = parseInt(d.value, 10) || 0, hours = parseFloat(h.value) || 0, total = Math.round(days * hours * 10) / 10;
+        out.textContent = '週' + days + '日×' + label(hours) + '＝週' + total + '時間。休む日は週' + (7 - days) + '日。' + (days === 7 ? '休む日が無い予定です。体調を守れるか確かめよう。' : '');
+      }
+      box.addEventListener('change', calc);
+      setTimeout(calc, 300);  /* 保存した値を戻したあと（initSaves は非同期）にもう一度 */
+      calc();
+    });
+  }
+
+  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); initJourney(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
