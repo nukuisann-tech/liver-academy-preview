@@ -3943,3 +3943,4 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .ps-card { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--c-line); background: #fff; }
 .ps-card .gp-look { margin: 4px 0 0; }
 .ps-card.ps-me { border: 2px solid var(--c-key); background: #fff8e1; }
+@media (min-width: 768px) { .ps-weak .gp-look__r { grid-template-columns: 11em 1fr; } }
