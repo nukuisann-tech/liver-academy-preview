@@ -3930,3 +3930,16 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .sw-rel { display: flex; flex-direction: column; gap: 2px; min-height: 44px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--c-line-strong); color: var(--c-ink); text-decoration: none; background: #fff; }
 .sw-rel b { color: var(--c-key); }
 .sw-rel span { font-size: 0.8125rem; }
+
+/* CT-052 指名されるライバーの市場戦略（contents_tpl/positioning.py） */
+.ps-vs { display: grid; gap: 10px; }
+@media (min-width: 768px) { .ps-vs { grid-template-columns: 1fr 1fr; } }
+.ps-side { padding: 12px 14px; border-radius: 12px; border: 1px solid var(--c-line); background: #fff; }
+.ps-side--b { border: 2px solid var(--c-key); }
+.ps-side .gp-back { margin-bottom: 8px; }
+.ps-after { margin: 0; font-weight: 700; font-size: 0.875rem; }
+.ps-cards { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 10px; }
+@media (min-width: 768px) { .ps-cards { grid-template-columns: 1fr 1fr; } }
+.ps-card { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--c-line); background: #fff; }
+.ps-card .gp-look { margin: 4px 0 0; }
+.ps-card.ps-me { border: 2px solid var(--c-key); background: #fff8e1; }
