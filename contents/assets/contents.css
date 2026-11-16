@@ -3944,3 +3944,22 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .ps-card .gp-look { margin: 4px 0 0; }
 .ps-card.ps-me { border: 2px solid var(--c-key); background: #fff8e1; }
 @media (min-width: 768px) { .ps-weak .gp-look__r { grid-template-columns: 11em 1fr; } }
+
+/* CT-053 コメントが少ない＝愛されていない、ではない（contents_tpl/actdiag.py） */
+.ad-fogg { margin-left: 8px; vertical-align: 2px; }
+.ad-guess li { opacity: 0.85; font-style: normal; }
+.ad-guess li::before { content: "？ "; font-weight: 800; color: var(--c-key); }
+.ad-fix { margin: 8px 0 0; padding: 10px 12px; border-radius: 10px; border: 2px solid var(--c-key); background: #fff; }
+.ad-fix b { display: block; font-size: 0.8125rem; color: var(--c-key); }
+.ad-cards { list-style: none; margin: 4px 0 12px; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.ad-card { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--c-line); background: #fff; }
+.ad-ex { font-size: 0.875rem; }
+.ad-why { font-size: 0.8125rem; opacity: 0.8; }
+.ad-have { margin: 0 0 6px; font-size: 0.8125rem; font-weight: 700; }
+.ad-log { margin: 4px 0 10px; padding: 10px 12px 10px 2em; border-radius: 10px; background: var(--c-dark); color: var(--c-on-dark); display: flex; flex-direction: column; gap: 4px; font-size: 0.875rem; }
+.ad-opts { list-style: none; margin: 4px 0 10px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ad-opts li { padding: 4px 10px; border-radius: 999px; border: 1px dashed var(--c-line-strong); font-size: 0.8125rem; font-weight: 700; }
+.ad-ans { border-radius: 12px; border: 1px solid var(--c-key); background: #fff; }
+.ad-ans summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; font-weight: 900; color: var(--c-key); cursor: pointer; }
+.ad-ans[open] { padding-bottom: 10px; }
+.ad-ans > :not(summary) { margin-left: 14px; margin-right: 14px; }
