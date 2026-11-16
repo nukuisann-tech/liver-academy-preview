@@ -3814,3 +3814,30 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .me-ui { position: absolute; right: 8px; bottom: 120px; display: grid; gap: 8px; }
 .me-ui span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.88); color: #123a5c; font-size: 0.875rem; }
 .me-cm { right: 48px; }
+/* ---- CT-050 伸び悩み突破の5つの幅（bt-） ---- */
+.bt-widths { list-style: none; padding: 0; margin: 12px 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.bt-widths li { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 2px; text-align: center; }
+.bt-widths b { font-size: 0.875rem; word-break: keep-all; overflow-wrap: anywhere; }
+.bt-widths span { font-size: 0.75rem; color: var(--c-ink); }
+.bt-flow { list-style: none; padding: 0; margin: 10px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.bt-flow li { background: var(--c-paper); border: 1px solid var(--c-line); border-radius: 10px; padding: 6px 10px; font-weight: 700; font-size: 0.875rem; }
+.bt-flow li + li::before { content: "→ "; color: var(--c-key); }
+.bt-live, .bt-tree, .bt-fac { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; border-radius: 16px; background: var(--c-paper); border: 1px solid var(--c-line); }
+.bt-live__c, .bt-tree__q { margin: 0; padding: 14px 22px; border-radius: 999px; background: var(--c-dark); color: #fff; font-weight: 900; letter-spacing: 0.06em; }
+.bt-fac__in, .bt-fac__out { margin: 0; font-weight: 800; }
+.bt-fac__in::after { content: " ↓"; color: var(--c-key); }
+.bt-fac__out::before { content: "↓ "; color: var(--c-key); }
+.bt-acq { display: grid; grid-template-columns: repeat(3, 1fr) 96px; gap: 10px; align-items: stretch; }
+.bt-acq__g { border: 2px solid var(--c-line); border-radius: 14px; padding: 10px; background: var(--c-paper); position: relative; }
+.bt-acq__g > p { margin: 0 0 6px; font-weight: 900; font-size: 0.8125rem; letter-spacing: 0.04em; }
+.bt-acq__g:nth-child(1) { border-color: #2f8a4a; } .bt-acq__g:nth-child(2) { border-color: #2f5bd3; } .bt-acq__g:nth-child(3) { border-color: #c98a00; }
+.bt-acq__live { margin: 0; border-radius: 14px; background: var(--c-dark); color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+.bt-tl { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.bt-tl li { display: flex; }
+.bt-tl li > * { flex: 1; }
+@media (max-width: 720px) {
+  .bt-widths { grid-template-columns: repeat(2, 1fr); }
+  .bt-acq { grid-template-columns: 1fr; }
+  .bt-acq__live { min-height: 56px; }
+  .bt-tl { grid-template-columns: 1fr; }
+}
