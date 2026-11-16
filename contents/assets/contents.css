@@ -3864,3 +3864,21 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 @media (min-width: 768px) { .gp-look__r { grid-template-columns: 9.5em 1fr; gap: 12px; align-items: baseline; } }
 .gp-tag { display: inline-block; margin-right: 8px; padding: 1px 8px; border-radius: 999px; background: var(--c-ink); color: #fff; font-size: 0.75rem; font-weight: 800; vertical-align: 1px; }
 .gp-back { margin: 4px 0 10px; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+
+/* CT-046 次の配信の操作盤（contents_tpl/first30.py b_console。題の下＝スマホの最初の画面） */
+.fv__top { margin-top: 16px; }
+.f30-con { background: #fff; color: var(--c-ink); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+.f30-con__h { margin: 0; font-weight: 900; font-size: 1rem; }
+.f30-con__lead { margin: 0; font-size: 0.8125rem; line-height: 1.6; color: var(--c-ink); }
+.f30-times { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.f30-time { display: flex; flex-direction: column; gap: 2px; min-height: 44px; height: 100%; box-sizing: border-box; padding: 10px 8px; border-radius: 12px; background: var(--c-dark); color: var(--c-on-dark); text-decoration: none; }
+.f30-time__k { font-size: 0.6875rem; font-weight: 800; color: #8fe3c0; }
+.f30-time b { font-size: 0.9375rem; line-height: 1.3; }
+.f30-time__s { font-size: 0.6875rem; line-height: 1.45; color: var(--c-on-dark-2); }
+.f30-con__k { margin: 4px 0 0; font-size: 0.75rem; font-weight: 900; }
+.f30-con__chips { margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.f30-con__chips .f30-chip { margin: 0; }
+.f30-con__plan { margin: 4px 0 0; }
+.f30-con__plan a { display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; border-radius: 999px; border: 2px solid var(--c-key); color: var(--c-key); font-weight: 900; text-decoration: none; }
+.f30-chip--map { border-style: dashed; }
+.f30-go--plan { font-weight: 900; }

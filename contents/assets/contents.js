@@ -928,6 +928,17 @@
     });
   }
 
-  function init() { initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); initJourney(); }
+  /* ページ内リンクの行き先が閉じた details（場面カードなど）なら開く。押す回数を 1 回減らすため。 */
+  function initOpenTarget() {
+    function open() {
+      var id = global.location.hash.slice(1), el = null;
+      try { el = id ? doc.getElementById(decodeURIComponent(id)) : null; } catch (e) { el = null; }
+      if (el && el.tagName === 'DETAILS' && !el.open) el.open = true;
+    }
+    global.addEventListener('hashchange', open);
+    open();
+  }
+
+  function init() { initOpenTarget(); initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); initJourney(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);
