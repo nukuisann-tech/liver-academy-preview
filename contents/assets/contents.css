@@ -3963,3 +3963,6 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .ad-ans summary { min-height: 44px; display: flex; align-items: center; padding: 0 14px; font-weight: 900; color: var(--c-key); cursor: pointer; }
 .ad-ans[open] { padding-bottom: 10px; }
 .ad-ans > :not(summary) { margin-left: 14px; margin-right: 14px; }
+
+/* CT-054 7回目も来たくなるLIVE体験（contents_tpl/visitjourney.py） */
+.vj-story { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--c-paper); border-left: 4px dashed var(--c-line-strong); font-size: 0.9375rem; }
