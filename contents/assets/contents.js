@@ -939,6 +939,36 @@
     open();
   }
 
-  function init() { initOpenTarget(); initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); initJourney(); }
+  /* 簡易経営シミュレーター（CT-055）: 入力から 1 か月の配信時間・総稼働時間・支出・利益・実効時給の目安を出す。
+     受取額が空なら利益と時給は出さない（分からない数字を 0 と扱わない）。保存は initSaves（data-save）に任せる。 */
+  function initBizSim() {
+    all('[data-bizsim]').forEach(function (box) {
+      var weeks = parseFloat(box.getAttribute('data-weeks')) || 4;
+      var root = box.closest('.jr-sub') || box.parentNode;
+      function num(k) { var el = box.querySelector('[data-field="' + k + '"]'); if (!el || el.value === '') return null; var v = parseFloat(el.value); return isNaN(v) ? null : v; }
+      function put(k, t) { var el = root.querySelector('[data-bz="' + k + '"]'); if (el) el.textContent = t; }
+      function yen(v) { return Math.round(v).toLocaleString('ja-JP') + ' 円'; }
+      function hrs(v) { return (Math.round(v * 10) / 10).toLocaleString('ja-JP') + ' 時間'; }
+      function calc() {
+        var t = num('times'), h = num('hours');
+        var weekLive = (t !== null && h !== null) ? t * h : null;
+        var extra = (num('prep') || 0) + (num('clip') || 0) + (num('review') || 0);
+        put('live', weekLive === null ? '—' : hrs(weekLive * weeks));
+        var work = weekLive === null ? null : (weekLive + extra) * weeks;
+        put('work', work === null ? '—' : hrs(work));
+        var cost = (num('eq') || 0) + (num('outs') || 0) + (num('ads') || 0) + (num('other') || 0);
+        put('cost', yen(cost));
+        var recv = num('recv');
+        if (recv === null) { put('profit', '受取額が未入力'); put('rate', '受取額が未入力'); return; }
+        var profit = recv - cost;
+        put('profit', yen(profit));
+        put('rate', work ? yen(profit / work) : '配信時間が未入力');
+      }
+      box.addEventListener('input', calc);
+      calc(); setTimeout(calc, 400); setTimeout(calc, 1200);
+    });
+  }
+
+  function init() { initOpenTarget(); initBizSim(); initFilter(); initSaves(); initCopy(); initToc(); initCompare(); initChat(); initVersus(); initBuilder(); initTimeline(); initSwitch(); initIdeaBank(); initLightLab(); initBgBuilder(); initLaunch(); initPromise(); initPanel(); initCompass(); initDiagnose(); initRoom(); initJoin(); initBridge(); initRecall(); fillFrom(); initSuggest(); initRoadmap(); initLights(); initReveal(); initJourney(); }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
 })(window);

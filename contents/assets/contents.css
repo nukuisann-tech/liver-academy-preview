@@ -3966,3 +3966,19 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 
 /* CT-054 7回目も来たくなるLIVE体験（contents_tpl/visitjourney.py） */
 .vj-story { margin: 0 0 10px; padding: 10px 12px; border-radius: 10px; background: var(--c-paper); border-left: 4px dashed var(--c-line-strong); font-size: 0.9375rem; }
+
+/* CT-055 事業の数字入門（contents_tpl/biznum.py） */
+.bz-tab th[scope="row"] { white-space: nowrap; }
+.bz-form { display: grid; gap: 8px; margin: 8px 0 12px; }
+@media (min-width: 768px) { .bz-form { grid-template-columns: 1fr 1fr; } }
+.bz-in { display: flex; flex-direction: column; gap: 4px; }
+.bz-in label { font-weight: 800; font-size: 0.875rem; }
+.bz-in span { display: flex; align-items: center; gap: 6px; }
+.bz-in input { flex: 1; min-width: 0; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--c-line-strong); background: #fff; font-size: 1rem; }
+.bz-in i { font-style: normal; font-size: 0.8125rem; white-space: nowrap; }
+.bz-out { margin: 0 0 12px; display: grid; gap: 6px; }
+.bz-out > div { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--c-dark); color: var(--c-on-dark); }
+.bz-out dt { font-size: 0.8125rem; }
+.bz-out dd { margin: 0; font-weight: 900; font-size: 1.0625rem; white-space: nowrap; }
+.bz-ok { border-color: #7bbf98 !important; }
+.bz-early { border-style: dashed !important; }
