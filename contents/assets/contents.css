@@ -3982,3 +3982,12 @@ html:not(.js) .rm__voice[hidden] { display: block; }
 .bz-out dd { margin: 0; font-weight: 900; font-size: 1.0625rem; white-space: nowrap; }
 .bz-ok { border-color: #7bbf98 !important; }
 .bz-early { border-style: dashed !important; }
+
+/* CT-056 実験思考と録画検証（contents_tpl/experiment.py） */
+.xp-steps { margin: 4px 0 12px; padding-left: 1.6em; display: flex; flex-direction: column; gap: 8px; }
+.xp-steps li b { display: block; }
+.xp-steps li span { font-size: 0.9375rem; }
+.xp-split { display: grid; gap: 8px; margin: 10px 0; }
+@media (min-width: 768px) { .xp-split { grid-template-columns: repeat(3, 1fr); } }
+.xp-split section { padding: 10px 12px; border-radius: 12px; border: 1px solid var(--c-line); background: #fff; }
+.xp-split p { margin: 0; }
